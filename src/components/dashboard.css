@@ -1,0 +1,31 @@
+/* Dashboard.css */
+
+/* Make the entire page white */
+.dashboard-container {
+    background-color: white;
+    color: black;
+    min-height: 100vh;  /* Full height */
+    padding: 2rem;
+  }
+  
+  /* Center content */
+  .dashboard-content {
+    margin-top: 80px; /* Adjust this based on your navbar height */
+    padding: 2rem;
+    text-align: center;
+    color: black; /* Ensure text is visible */
+  }
+  
+  /* Headings */
+  .dashboard-content h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  /* Paragraph */
+  .dashboard-content p {
+    font-size: 1.2rem;
+    opacity: 0.8;
+  }
+  
