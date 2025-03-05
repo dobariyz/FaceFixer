@@ -28,4 +28,40 @@
     font-size: 1.2rem;
     opacity: 0.8;
   }
-  
+
+/* Make the container take full height */
+.dashboard-container {
+  background: url('/background.jpg') no-repeat center center/cover; 
+  background-color: white;
+  color: black;
+  min-height: 100vh;  /* Full height */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+
+/* Content should expand to push the button to the bottom */
+.dashboard-content {
+  flex: 1;  /* Makes it take available space */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+/* Button stays at the bottom of content */
+.dashboard-button {
+  margin-top: auto;
+  padding: 12px 24px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
