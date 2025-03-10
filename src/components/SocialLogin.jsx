@@ -1,3 +1,5 @@
+import "./dashboard.css";
+
 const SocialLogin = () => {
     return (
       <div className="social-login">

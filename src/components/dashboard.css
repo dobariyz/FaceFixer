@@ -1,33 +1,40 @@
 /* Dashboard.css */
 
-/* Make the entire page white */
 .dashboard-container {
-    background-color: white;
-    color: black;
-    min-height: 100vh;  /* Full height */
-    padding: 2rem;
-  }
-  
+  background: url('/background.jpg') no-repeat center center/cover; 
+  background-color: white;
+  color: black;
+  height: 100vh;  /* Ensures full viewport height */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Centers content */
+  width: 100vw;  /* Ensure it covers full width */
+  padding: 2rem;
+  position: fixed; /* Prevents scrolling and ensures full coverage */
+  top: 0;
+  left: 0;
+}
   /* Center content */
-  .dashboard-content {
+.dashboard-content {
     margin-top: 80px; /* Adjust this based on your navbar height */
     padding: 2rem;
     text-align: center;
     color: black; /* Ensure text is visible */
-  }
+}
   
   /* Headings */
-  .dashboard-content h1 {
+.dashboard-content h1 {
     font-size: 2rem;
     font-weight: bold;
     margin-bottom: 1rem;
-  }
+}
   
   /* Paragraph */
-  .dashboard-content p {
+.dashboard-content p {
     font-size: 1.2rem;
     opacity: 0.8;
-  }
+}
 
 /* Make the container take full height */
 .dashboard-container {
@@ -53,8 +60,8 @@
 }
 
 /* Button stays at the bottom of content */
-.dashboard-button {
-  margin-top: auto;
+.dashboard-uploadImage {
+  margin-top: 350px;
   padding: 12px 24px;
   background-color: black;
   color: white;
@@ -64,4 +71,19 @@
   font-size: 16px;
   font-weight: bold;
   transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* this is for the login page background image*/
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url('/src/assets/loginBackground.jpg') no-repeat center center fixed;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }

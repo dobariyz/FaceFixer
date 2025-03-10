@@ -1,0 +1,11 @@
+.dashboard-footer {
+  width: 100%;
+  background: transparent; /* Make background transparent */
+  color: black; /* Set font color to black */
+  text-align: center;
+  padding: 1rem;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  font-weight: bold;
+}

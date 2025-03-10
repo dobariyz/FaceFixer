@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"; // Importing useNavigate hook for navigation
 import SocialLogin from "./components/SocialLogin"; // Importing SocialLogin component for third-party login options
 import InputField from "./components/InputField"; // Importing reusable InputField component for user input fields
+import Footer from "./components/Footer";
 
 const App = () => {
   const navigate = useNavigate(); // Initializing the navigate function from React Router
@@ -32,10 +33,15 @@ const App = () => {
       </form>
 
       <p className="signup-prompt"> {/* Sign-up prompt for new users */}
-        Don&apos;t have an account? <a href="#" className="signup-link">Sign up</a>
+        Don't have an account? <a href="/signup" className="signup-link">Sign up</a>
       </p>
 
+    <div>
+      <Footer/>
     </div>
+
+    </div>
+    
   );
 };
 
