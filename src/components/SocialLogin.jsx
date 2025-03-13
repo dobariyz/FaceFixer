@@ -8,8 +8,8 @@ const SocialLogin = () => {
           Google
         </button>
         <button className="social-button">
-          <img src="apple.svg" alt="Apple" className="social-icon" />
-          Apple
+          <img src="Facebook.jpeg" alt="Facebook" className="social-icon" />
+          Facebook
         </button>
       </div>
     )

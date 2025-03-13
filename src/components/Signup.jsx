@@ -17,7 +17,8 @@ const Signup = () => {
         <h2 className="form-title">Create an Account</h2>
   
         <form onSubmit={handleSignup} className="signup-form">
-          <InputField type="text" placeholder="Full Name"/>
+          <InputField type="text" placeholder="First Name" icon="edit"/>
+          <InputField type="text" placeholder="Last Name"  icon="edit"/>
           <InputField type="email" placeholder="Email Address" icon="mail" />
           <InputField type="password" placeholder="Password" icon="lock"/>
           <InputField type="password" placeholder="Confirm Password" icon="lock"/>
