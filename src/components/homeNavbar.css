@@ -38,28 +38,21 @@
 }
 
 .search-button {
-  
-  color: white;
+  color: white;  /* Matching color with logout button */
   border: none;
   padding: 0.5rem;
   border-radius: 50%;
   cursor: pointer;
 }
 
-/* Right: User Name & Logout */
+/* Right: Login & Signup Buttons */
 .navbar-right {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.user-name {
-  font-size: 1rem;
-  font-weight: bold;
-  color: black;
-}
-
-.logout-button {
+.login-button, .signup-button {
   background-color: black;
   color: white;
   border: none;
@@ -67,4 +60,9 @@
   border-radius: 20px;
   cursor: pointer;
   font-weight: bold;
+}
+
+/* Optional: Hover effects */
+.login-button:hover, .signup-button:hover, .search-button:hover {
+  background-color: #333; /* Slightly darker for hover effect */
 }
