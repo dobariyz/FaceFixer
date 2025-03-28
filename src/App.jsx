@@ -2,14 +2,33 @@ import { useNavigate } from "react-router-dom"; // Importing useNavigate hook fo
 import SocialLogin from "./components/SocialLogin"; // Importing SocialLogin component for third-party login options
 import InputField from "./components/InputField"; // Importing reusable InputField component for user input fields
 import Footer from "./components/Footer";
+import axios from "axios";
+
 
 const App = () => {
   const navigate = useNavigate(); // Initializing the navigate function from React Router
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault(); // Prevents the default form submission behavior
     // Here, you can add authentication logic before navigating
-    navigate("/dashboard"); // Redirect to the dashboard page after successful login
+
+    const email = e.target[0].value;  // Getting the email value from the form
+    const password = e.target[1].value;  // Getting the password value from the form
+    
+    try {
+      const response = await axios.post('http://localhost:5000/', { email, password }); // Make a POST request to backend
+      const { token } = response.data;  // Assuming the backend sends a 'token' in the response
+
+      // Store the JWT token in localStorage
+      localStorage.setItem('token', token);
+
+      // Navigate to the dashboard page after successful login
+      navigate("/dashboard");
+
+    } catch (error) {
+      console.error('Login failed:', error);
+      alert("Login failed! Please check your credentials.");
+    }
   };
 
   return (
