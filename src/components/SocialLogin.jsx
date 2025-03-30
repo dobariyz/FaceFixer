@@ -7,10 +7,7 @@ const SocialLogin = () => {
           <img src="Google.svg" alt="Google" className="social-icon" />
           Google
         </button>
-        <button className="social-button">
-          <img src="Facebook.jpeg" alt="Facebook" className="social-icon" />
-          Facebook
-        </button>
+        
       </div>
     )
 

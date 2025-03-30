@@ -4,9 +4,9 @@ import "./footer.css";
 const Footer = () => {
   return (
     <footer className="dashboard-footer">
-      <p>&copy; 2024 FaceFixer. All Rights Reserved.</p>
-      <p>Contact: contact@facefixer.com | Phone: (123) 456-7890</p>
-      <p>Address: 7897 McLaughlin Rd, Brampton, ON L6Y 5H9</p>
+      <h6>&copy; 2025 FaceFixer. All Rights Reserved.</h6>
+      <h6>Contact: contact@facefixer.com | Phone: (123) 456-7890</h6>
+      <h6>Address: 7897 McLaughlin Rd, Brampton, ON L6Y 5H9</h6>
     </footer>
   );
 };

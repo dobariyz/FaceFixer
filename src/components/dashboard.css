@@ -1,56 +1,21 @@
-/* Dashboard.css */
-
 .dashboard-container {
   background: url('/background.jpg') no-repeat center center/cover; 
   background-color: white;
   color: black;
-  height: 100vh;  /* Ensures full viewport height */
+  height: 100vh;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* Centers content */
-  width: 100vw;  /* Ensure it covers full width */
+  justify-content: center;
   padding: 2rem;
-  position: fixed; /* Prevents scrolling and ensures full coverage */
+  position: fixed;
   top: 0;
   left: 0;
 }
-  /* Center content */
-.dashboard-content {
-    margin-top: 80px; /* Adjust this based on your navbar height */
-    padding: 2rem;
-    text-align: center;
-    color: black; /* Ensure text is visible */
-}
-  
-  /* Headings */
-.dashboard-content h1 {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-}
-  
-  /* Paragraph */
-.dashboard-content p {
-    font-size: 1.2rem;
-    opacity: 0.8;
-}
 
-/* Make the container take full height */
-.dashboard-container {
-  background: url('/background.jpg') no-repeat center center/cover; 
-  background-color: white;
-  color: black;
-  min-height: 100vh;  /* Full height */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2rem;
-}
-
-/* Content should expand to push the button to the bottom */
 .dashboard-content {
-  flex: 1;  /* Makes it take available space */
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -59,31 +24,94 @@
   width: 100%;
 }
 
-/* Button stays at the bottom of content */
-.dashboard-uploadImage {
-  margin-top: 350px;
-  padding: 12px 24px;
-  background-color: black;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
+/* Punchlines */
+.dashboard-content h2 {
+  font-size: 1.8rem;
   font-weight: bold;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-bottom: 0.5rem;
+  text-align: center;
 }
 
-/* this is for the login page background image*/
-body, html {
-  margin: 0;
-  padding: 0;
+.dashboard-content p {
+  font-size: 1.1rem;
+  max-width: 600px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Image Container */
+.image-preview-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
   width: 100%;
-  height: 100%;
+  max-width: 1000px;
+  margin-top: 40px;
+}
+
+/* Image Box */
+.image-section {
+  width: 45%;
+  height: 400px;
+  text-align: center;
+  border: 3px solid #ccc;
+  padding: 15px;
+  border-radius: 15px;
+  background-color: white;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Image Title */
+.image-section h3 {
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+/* Image Styling */
+.image-preview {
+  width: 100%;
+  height: 350px;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+/* Placeholder for Processing */
+.processing-placeholder {
+  width: 100%;
+  height: 350px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: url('/src/assets/loginBackground.jpg') no-repeat center center fixed;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+  background-color: #f0f0f0;
+  color: #888;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+/* File Input */
+.file-input {
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+/* Upload Button */
+.dashboard-uploadImage {
+  margin-top: 30px;
+  padding: 14px 28px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
