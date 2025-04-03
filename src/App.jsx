@@ -3,9 +3,12 @@ import SocialLogin from "./components/SocialLogin"; // Importing SocialLogin com
 import InputField from "./components/InputField"; // Importing reusable InputField component for user input fields
 import Footer from "./components/Footer";
 import axios from "axios";
+import ProtectedRoutes from "./components/ProtectedRoutes";
+//<Route path="/dashboard" element={<ProtectedRoutes><Dashboard /></ProtectedRoutes>} />
 
 
 const App = () => {
+
   const navigate = useNavigate(); // Initializing the navigate function from React Router
 
   const handleLogin = async (e) => {
@@ -19,15 +22,15 @@ const App = () => {
       const response = await axios.post('http://localhost:5000/auth/loginUser', { email, password }); // Make a POST request to backend
       const { token } = response.data;  // Assuming the backend sends a 'token' in the response
 
-      // Store the JWT token in localStorage
-      localStorage.setItem('token', token);
-
-      // Navigate to the dashboard page after successful login
-      navigate("/dashboard");
-
+      if (response.status === 200 && response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        navigate("/dashboard");
+      } else {
+        throw new Error("Invalid response from server");
+      }
     } catch (error) {
-      console.error('Login failed:', error);
-      alert("Login failed! Please check your credentials.");
+      console.error('Login failed:', error.response?.data?.message || error.message);
+      alert(error.response?.data?.message || "Login failed! Please check your credentials.");
     }
   };
 

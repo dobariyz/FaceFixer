@@ -5,7 +5,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const user = {
-    name: "Zeel Doabriya",
+    name: "Zeel Dobariya",
   };
 
   const handleLogout = () => {
