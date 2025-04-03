@@ -1,11 +1,21 @@
+/* Dashboard Footer */
 .dashboard-footer {
   width: 100%;
-  background: transparent; /* Make background transparent */
-  color: black; /* Set font color to black */
+  background: linear-gradient(135deg, #00bcd4, #00796b); /* Watery fresh gradient */
+  color: white;
   text-align: center;
   padding: 1rem;
   position: fixed;
   bottom: 0;
   left: 0;
   font-weight: bold;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
+}
+
+.dashboard-footer:hover {
+  background: linear-gradient(135deg, #0097a7, #004d40); /* Lively contrast on hover */
 }

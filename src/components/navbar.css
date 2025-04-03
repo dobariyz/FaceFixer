@@ -1,32 +1,38 @@
+/* Jaw-Dropping Responsive Navbar */
 .navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #f8f8f8;
+  background: linear-gradient(135deg, #00bcd4, #00796b); /* Watery fresh gradient */
   padding: 1rem 2rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 1000;
+  transition: all 0.3s ease-in-out;
 }
 
 /* Left: Company Name */
 .company-name {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: bold;
-  color: #000;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 /* Center: Search Bar */
 .search-bar {
   display: flex;
   align-items: center;
-  background-color: #f0f0f5;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 50px;
-  padding: 0.5rem 1rem;
+  padding: 0.7rem 1.5rem;
   width: 40%;
+  backdrop-filter: blur(10px);
+  transition: width 0.3s ease-in-out;
 }
 
 .search-bar input {
@@ -35,36 +41,87 @@
   outline: none;
   width: 100%;
   font-size: 1rem;
+  color: #fff;
+}
+
+.search-bar input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .search-button {
-  
-  color: white;
+  background: #ffcc00;
+  color: #000;
   border: none;
   padding: 0.5rem;
   border-radius: 50%;
   cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.search-button:hover {
+  transform: scale(1.1);
 }
 
 /* Right: User Name & Logout */
 .navbar-right {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.2rem;
 }
 
 .user-name {
   font-size: 1rem;
   font-weight: bold;
-  color: black;
+  color: white;
 }
 
 .logout-button {
-  background-color: black;
-  color: white;
+  background: #ffcc00;
+  color: black;
   border: none;
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1.2rem;
   border-radius: 20px;
   cursor: pointer;
   font-weight: bold;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.logout-button:hover {
+  background: #e6b800;
+  transform: scale(1.05);
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .search-bar {
+    width: 60%;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+  }
+  .search-bar {
+    width: 80%;
+    margin-top: 10px;
+  }
+  .navbar-right {
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .company-name {
+    font-size: 1.4rem;
+  }
+  .search-bar {
+    width: 100%;
+  }
+  .logout-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
 }
