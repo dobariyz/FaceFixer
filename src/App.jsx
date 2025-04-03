@@ -16,7 +16,7 @@ const App = () => {
     const password = e.target[1].value;  // Getting the password value from the form
     
     try {
-      const response = await axios.post('http://localhost:5000/', { email, password }); // Make a POST request to backend
+      const response = await axios.post('http://localhost:5000/auth/loginUser', { email, password }); // Make a POST request to backend
       const { token } = response.data;  // Assuming the backend sends a 'token' in the response
 
       // Store the JWT token in localStorage

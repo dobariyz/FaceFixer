@@ -23,28 +23,45 @@ const Signup = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
+
     if (userData.password !== userData.confirmPassword) {
       alert("Passwords do not match!");
+      
+    }
+    if (!userData.firstName || !userData.lastName || !userData.email || !userData.password) {
+      alert("All fields are required!");
       return;
     }
 
+    const requestData = {
+      firstName: userData.firstName.trim(),
+      lastName: userData.lastName.trim(),
+      email: userData.email.trim(),
+      password: userData.password.trim(),
+    };
+
+    console.log("Sending data:", requestData);  // Debugging statement
+
 
     try {
-      const response = await axios.post("http://localhost:5000/signup", {
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        email: userData.email,
-        password: userData.password,
-      },
-    );
-  
-
+      const response = await axios.post("http://localhost:5000/auth/signupUser", requestData, {
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+    
       console.log(response.data); // Handle the response, e.g., success message or token
-      navigate("/App"); // Redirect to dashboard after successful signup
+
+      navigate("/"); // Redirect to dashboard after successful signup
     } catch (error) {
       console.error("Error during signup:", error);
-      alert("Error during signup. Please try again.");
+      if (error.response && error.response.status === 400) {
+        alert(error.response.data.message);
     }
+     else {
+        alert("An unexpected error occurred. Please try again.");
+      }
+    }
+
   };
 
   return (

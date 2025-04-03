@@ -1,7 +1,7 @@
 import { useState } from "react"; // Importing useState hook from React to manage component state
 
 // Functional component InputField with destructured props: type, placeholder, and icon
-const InputField = ({ type, placeholder, icon }) => {
+const InputField = ({ type, placeholder, icon, name, value, onChange  }) => {
 
   // State to toggle password visibility, initially set to false
   const [isPasswordShown, setIsPasswordShown] = useState(false);
@@ -13,6 +13,9 @@ const InputField = ({ type, placeholder, icon }) => {
         type={isPasswordShown ? 'text' : type} // If password is shown, change type to 'text', else use provided type
         placeholder={placeholder} // Sets the placeholder text from props
         className="input-field" // Assigning a CSS class for styling
+        name={name} // Ensure the input has a name
+        value={value} // Bind value from state
+        onChange={onChange} // Pass the onChange function
         required // Ensures that the input field is required in a form
       />
 
