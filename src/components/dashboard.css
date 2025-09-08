@@ -35,14 +35,14 @@
   margin-bottom: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #fff; /* Ensure consistency with navbar/footer */
+  color: white; /* Ensure consistency with navbar/footer */
 }
 
 .dashboard-content p {
   font-size: 1.2rem;
   max-width: 600px;
   margin-bottom: 20px;
-  color: #ddd; /* Light color to complement dark background */
+  color: white; /* Light color to complement dark background */
   line-height: 1.6;
 }
 

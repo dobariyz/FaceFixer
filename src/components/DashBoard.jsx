@@ -5,12 +5,20 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import backgroundImage from "/src/assets/background.png";
 
+
+{/* <button className="dashboard-uploadImage" onClick={() => setShowHistory(!showHistory)}>
+  {showHistory ? "Hide History" : "View History"}
+</button> */}
+
+
 const Dashboard = () => {
   const navigate = useNavigate();
    
   const [selectedFile, setSelectedFile] = useState(null);
   const [processedImage, setProcessedImage] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [history, setHistory] = useState([]);
+  const [showHistory, setShowHistory] = useState(false);
 
   // Token handling on page load
   useEffect(() => {
@@ -31,6 +39,29 @@ const Dashboard = () => {
     }
   }, [navigate]);
 
+  useEffect(() => {
+  const fetchHistory = async () => {
+    if (!showHistory) return;
+
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch("http://localhost:5000/api/detections/history", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+      setHistory(data);
+    } catch (error) {
+      console.error("Error fetching history:", error);
+    }
+  };
+
+  fetchHistory();
+}, [showHistory]);
+
+
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };
@@ -47,22 +78,43 @@ const Dashboard = () => {
     setIsProcessing(true);
     const token = localStorage.getItem('token');
 
-    try {
-      const response = await fetch("http://localhost:5000/api/detect", {
-        method: "POST", 
-        body: formData,
-        headers: {
-          "Authorization": `Bearer ${token}`, // Send token with request
-        },
-      });
+    // try {
+    //   const response = await fetch("http://localhost:5000/api/detect", {
+    //     method: "POST", 
+    //     body: formData,
+    //     headers: {
+    //       "Authorization": `Bearer ${token}`, // Send token with request
+    //     },
+    //   });
 
-      const imageUrl = await response.text();
-      setProcessedImage(`http://localhost:5000${imageUrl}`);
-    } catch (error) {
-      console.error("Error uploading file:", error);
-    } finally {
-      setIsProcessing(false);
-    }
+    //   const imageUrl = await response.text();
+    //   setProcessedImage(`http://localhost:5000${imageUrl}`);
+    // } catch (error) {
+    //   console.error("Error uploading file:", error);
+    // } finally {
+    //   setIsProcessing(false);
+    // }
+    try {
+  const response = await fetch("http://localhost:5000/api/detect", {
+    method: "POST",
+    body: formData,
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to upload image");
+  }
+
+  const data = await response.json();
+  setProcessedImage(`http://localhost:5000${data.processed}`);
+} catch (error) {
+  console.error("Error uploading file:", error);
+} finally {
+  setIsProcessing(false);
+}
+
   };
 
   return (
@@ -102,6 +154,39 @@ const Dashboard = () => {
         </div>
 
         <button className="dashboard-uploadImage" onClick={handleUpload}>Let's detect</button>
+        <button className="dashboard-uploadImage" onClick={() => setShowHistory(!showHistory)}>
+  {showHistory ? "Hide History" : "View History"}
+</button>
+
+{showHistory && (
+  <div className="history-section">
+    <h3>Your Detection History</h3>
+    {history.length === 0 ? (
+      <p>No history found.</p>
+    ) : (
+      <div className="history-grid">
+        {history.map((item, index) => (
+          <div key={index} className="history-item">
+            <p><strong>Uploaded:</strong></p>
+            <img
+              src={`http://localhost:5000/api/image?file=${item.imagePath}`}
+              alt="Uploaded"
+              className="image-preview"
+            />
+            <p><strong>Detected:</strong></p>
+            <img
+              src={`http://localhost:5000/api/image?file=${item.resultPath}`}
+              alt="Detected"
+              className="image-preview"
+            />
+            <p><strong>Date:</strong> {new Date(item.createdAt).toLocaleString()}</p>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+)}
+
       </div>
       <Footer />
     </div>
