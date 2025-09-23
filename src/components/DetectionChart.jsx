@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Chart from 'chart.js/auto';
 
 const DetectionChart = () => {
   const [chartData, setChartData] = useState(null);
@@ -10,51 +9,70 @@ const DetectionChart = () => {
   const [activeChart, setActiveChart] = useState('bar');
 
   useEffect(() => {
-    const fetchHistory = async () => {
-      try {
-        setLoading(true);
-        
-        // Get token from localStorage
-        const token = localStorage.getItem("token");
-        if (!token) {
-          setError("No authentication token found");
-          setLoading(false);
-          return;
-        }
+  const fetchHistory = async () => {
+    try {
+      setLoading(true);
 
-        // Fetch data from your backend API
-        const response = await fetch("http://localhost:5000/api/detections/history", {
-          method: "GET",
-          headers: { 
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        
-        if (!data || data.length === 0) {
-          setError("No detection data found");
-          setLoading(false);
-          return;
-        }
-
-        // Process data for different chart types
-        processChartData(data);
+      // 1️⃣ Get token
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("No authentication token found");
         setLoading(false);
-      } catch (err) {
-        console.error("Error fetching detection history:", err);
-        setError(`Failed to fetch detection history: ${err.message}`);
-        setLoading(false);
+        return;
       }
-    };
 
-    fetchHistory();
-  }, []);
+      // 2️⃣ Get userId from stored user object
+      const user = JSON.parse(localStorage.getItem("user"));
+      const userId = user?.id;
+
+      // If userId is not found, stop and show error
+      if (!userId) {
+        console.warn("⚠️ No userId found, backend must infer from token");
+      }
+
+      // 3️⃣ Build URL: if userId exists → send as query param
+      const url = userId
+        ? `http://localhost:5000/api/detections/history?userId=${userId}`
+        : `http://localhost:5000/api/detections/history`;
+
+      // 4️⃣ Call API
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }s
+
+      const data = await response.json();
+
+// 🔥 Pick latest based on createdAt
+const latest = Array.isArray(data)
+  ? data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0]
+  : data;
+
+if (!latest) {
+  setError("No detection data found");
+  setLoading(false);
+  return;
+}
+
+processChartData([latest]); // send only one record
+
+      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching detection history:", err);
+      setError(`Failed to fetch detection history: ${err.message}`);
+      setLoading(false);
+    }
+  };
+
+  fetchHistory();
+}, []);
 
   const processChartData = (data) => {
     const counts = {};
