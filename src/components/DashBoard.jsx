@@ -40,8 +40,38 @@ const Dashboard = () => {
             />
             {selectedFile && <p>Selected File: {selectedFile}</p>}
           </div>
+
+          {showHistory && (
+            <div className="history-section">
+              <h3>Your Detection History</h3>
+              {history.length === 0 ? (
+                <p>No history found.</p>
+              ) : (
+                <div className="history-grid">
+                  {history.map((item, index) => (
+                    <div key={index} className="history-item">
+                      <p><strong>Uploaded:</strong></p>
+                      <img
+                        src={`http://localhost:5000/api/image?file=${item.imagePath}`}
+                        alt="Uploaded"
+                        className="image-preview"
+                      />
+                      <p><strong>Detected:</strong></p>
+                      <img
+                        src={`http://localhost:5000/api/image?file=${item.resultPath}`}
+                        alt="Detected"
+                        className="image-preview"
+                      />
+                      <p><strong>Date:</strong> {new Date(item.createdAt).toLocaleString()}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
+
       <Footer />
     </div>
   );
