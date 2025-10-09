@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Chart from 'chart.js/auto';
 
 const DetectionChart = () => {
   const [chartData, setChartData] = useState(null);
@@ -13,7 +14,7 @@ const DetectionChart = () => {
     try {
       setLoading(true);
 
-      // 1️⃣ Get token
+      // 1 Get token
       const token = localStorage.getItem("token");
       if (!token) {
         setError("No authentication token found");
@@ -21,7 +22,7 @@ const DetectionChart = () => {
         return;
       }
 
-      // 2️⃣ Get userId from stored user object
+      // 2️ Get userId from stored user object
       const user = JSON.parse(localStorage.getItem("user"));
       const userId = user?.id;
 
@@ -30,12 +31,12 @@ const DetectionChart = () => {
         console.warn("⚠️ No userId found, backend must infer from token");
       }
 
-      // 3️⃣ Build URL: if userId exists → send as query param
+      // 3️ Build URL: if userId exists → send as query param
       const url = userId
         ? `http://localhost:5000/api/detections/history?userId=${userId}`
         : `http://localhost:5000/api/detections/history`;
 
-      // 4️⃣ Call API
+      // 4️ Call API
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -46,11 +47,11 @@ const DetectionChart = () => {
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
-      }s
+      }
 
       const data = await response.json();
 
-// 🔥 Pick latest based on createdAt
+// Pick latest based on createdAt
 const latest = Array.isArray(data)
   ? data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0]
   : data;

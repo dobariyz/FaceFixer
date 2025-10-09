@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './Login'; // Fixed path
-import Dashboard from './components/Dashboard'; // Fixed case
+import Dashboard from './components/DashBoard'; // Fixed case
 import DetectionChart from './components/DetectionChart';
 import Signup from './components/Signup';
 import ProtectedRoutes from './components/ProtectedRoutes';
-
+import Recommendations from './components/Recommendations';
 const App = () => {
   return (
     <Router>
@@ -30,6 +30,15 @@ const App = () => {
           element={
             <ProtectedRoutes>
               <DetectionChart />
+            </ProtectedRoutes>
+          } 
+        />
+
+        <Route 
+          path="/recommendations" 
+          element={
+            <ProtectedRoutes>
+              <Recommendations />
             </ProtectedRoutes>
           } 
         />

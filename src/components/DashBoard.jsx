@@ -14,7 +14,6 @@ const Dashboard = () => {
   const [history, setHistory] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
 
-  // Remove all token handling - ProtectedRoutes handles this now
 
  useEffect(() => {
     const fetchHistory = async () => {
@@ -125,18 +124,22 @@ const Dashboard = () => {
           </button>
 
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="dashboard-uploadImage"
+            onClick={() => navigate("/recommendations")}
+          >
+            Recommendations
+          </button>
+
+          <button
+            className="dashboard-uploadImage"
             onClick={() => navigate("/detection-chart")}
           >
             View Detection Report
           </button>
 
-          <button
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-            onClick={handleLogout}
-          >
-            Logout
-          </button>
+          
+
+          
         </div>
 
         {showHistory && (
