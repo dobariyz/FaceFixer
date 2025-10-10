@@ -21,9 +21,11 @@ const Navbar = () => {
       </div>
 
       {/* Center: Search Bar */}
-      <div className="search-bar">
-        <input type="text" placeholder="What are you looking for?" />
-        <button className="search-button">🔍</button>
+      <div className="navbar-center">
+        <div className="search-bar">
+          <input type="text" placeholder="What are you looking for?" />
+          <button className="search-button" aria-label="Search">🔍</button>
+        </div>
       </div>
 
       {/* Right: User Name & Logout Button */}

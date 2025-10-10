@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import "./recommendations.css";
 
 const Recommendations = () => {
   const [products, setProducts] = useState({});
@@ -8,7 +9,6 @@ const Recommendations = () => {
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
-        // Get token from localStorage with correct key
         const token = localStorage.getItem('token');
         
         console.log('🔑 Token:', token ? 'Found' : 'Not found');
@@ -55,10 +55,10 @@ const Recommendations = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-pink-50 to-purple-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading recommendations...</p>
+      <div className="recommendations-container">
+        <div className="loading-wrapper">
+          <div className="spinner"></div>
+          <p className="loading-text">Loading recommendations...</p>
         </div>
       </div>
     );
@@ -66,30 +66,30 @@ const Recommendations = () => {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-pink-50 to-purple-50">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md">
-          <h3 className="text-red-800 font-semibold mb-2">Error</h3>
-          <p className="text-red-600">{error}</p>
+      <div className="recommendations-container">
+        <div className="error-card">
+          <h3 className="error-title">Error</h3>
+          <p className="error-message">{error}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+    <div className="recommendations-container">
+      <div className="recommendations-wrapper">
+        <div className="header-section">
+          <h1 className="main-title">
             Your Personalized Recommendations
           </h1>
-          <p className="text-gray-600">
+          <p className="subtitle">
             Products tailored to your skin concerns
           </p>
         </div>
 
         {Object.keys(products).length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No recommendations found.</p>
+          <div className="empty-state">
+            <p className="empty-message">No recommendations found.</p>
           </div>
         )}
 
@@ -101,69 +101,51 @@ const Recommendations = () => {
           }
           
           return (
-            <div key={keyword} className="mb-16">
-              <div className="flex items-center mb-6">
-                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-pink-300 to-transparent"></div>
-                <h2 className="px-6 text-3xl font-bold text-gray-800 uppercase tracking-wide">
-                  {keyword}
-                </h2>
-                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-pink-300 to-transparent"></div>
+            <div key={keyword} className="category-section">
+              <div className="category-header">
+                <div className="divider-line"></div>
+                <h2 className="category-title">{keyword}</h2>
+                <div className="divider-line"></div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+              <div className="products-grid">
                 {productList.map((product) => (
-                  <div
-                    key={product.id}
-                    className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col"
-                  >
-                    <div className="relative w-full h-64 bg-gray-100 flex items-center justify-center overflow-hidden">
+                  <div key={product.id} className="product-card">
+                    <div className="product-image-wrapper">
                       <img
                         src={product.image}
                         alt={product.name}
-                        className="w-full h-full object-contain p-4"
+                        className="product-image"
                         onError={(e) => {
                           e.target.src = 'https://via.placeholder.com/270?text=No+Image';
                         }}
                       />
                     </div>
 
-                    <div className="p-4 flex-1 flex flex-col">
-                      <p className="text-xs font-semibold text-pink-600 uppercase tracking-wide mb-1">
-                        {product.brand}
-                      </p>
+                    <div className="product-content">
+                      <p className="product-brand">{product.brand}</p>
 
-                      <h3 className="text-sm font-semibold text-gray-800 mb-3 flex-1" style={{ 
-                        display: '-webkit-box',
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical',
-                        overflow: 'hidden'
-                      }}>
-                        {product.name}
-                      </h3>
+                      <h3 className="product-name">{product.name}</h3>
 
-                      <div className="flex items-center justify-between mt-auto">
-                        <p className="text-lg font-bold text-gray-900">
-                          {product.price}
-                        </p>
+                      <div className="product-footer">
+                        <p className="product-price">{product.price}</p>
                         <a
                           href={product.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium rounded-lg transition-colors duration-200"
+                          className="product-button"
                         >
                           View
                           <svg
-  className="ml-1 w-3 h-3 flex-shrink-0"
-  xmlns="http://www.w3.org/2000/svg"
-  fill="none"
-  stroke="currentColor"
-  strokeWidth={2}
-  viewBox="0 0 24 24"
-  width="12"
-  height="12"
->
-  <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-</svg>
+                            className="button-icon"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            viewBox="0 0 24 24"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                          </svg>
                         </a>
                       </div>
                     </div>

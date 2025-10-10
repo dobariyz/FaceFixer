@@ -6,8 +6,10 @@ import DetectionChart from './components/DetectionChart';
 import Signup from './components/Signup';
 import ProtectedRoutes from './components/ProtectedRoutes';
 import Recommendations from './components/Recommendations';
+import { SessionProvider } from './components/SessionContext';
 const App = () => {
   return (
+    <SessionProvider>
     <Router>
       <Routes>
         {/* Public Routes */}
@@ -47,6 +49,7 @@ const App = () => {
         <Route path="*" element={<Login />} />
       </Routes>
     </Router>
+    </SessionProvider>
   );
 };
 

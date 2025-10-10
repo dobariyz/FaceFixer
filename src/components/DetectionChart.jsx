@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Chart from 'chart.js/auto';
+import "./detectionChart.css";
 
 const DetectionChart = () => {
   const [chartData, setChartData] = useState(null);
@@ -10,70 +10,63 @@ const DetectionChart = () => {
   const [activeChart, setActiveChart] = useState('bar');
 
   useEffect(() => {
-  const fetchHistory = async () => {
-    try {
-      setLoading(true);
+    const fetchHistory = async () => {
+      try {
+        setLoading(true);
 
-      // 1 Get token
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setError("No authentication token found");
+        const token = localStorage.getItem("token");
+        if (!token) {
+          setError("No authentication token found");
+          setLoading(false);
+          return;
+        }
+
+        const user = JSON.parse(localStorage.getItem("user"));
+        const userId = user?.id;
+
+        if (!userId) {
+          console.warn("⚠️ No userId found, backend must infer from token");
+        }
+
+        const url = userId
+          ? `http://localhost:5000/api/detections/history?userId=${userId}`
+          : `http://localhost:5000/api/detections/history`;
+
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const latest = Array.isArray(data)
+          ? data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0]
+          : data;
+
+        if (!latest) {
+          setError("No detection data found");
+          setLoading(false);
+          return;
+        }
+
+        processChartData([latest]);
         setLoading(false);
-        return;
+      } catch (err) {
+        console.error("Error fetching detection history:", err);
+        setError(`Failed to fetch detection history: ${err.message}`);
+        setLoading(false);
       }
+    };
 
-      // 2️ Get userId from stored user object
-      const user = JSON.parse(localStorage.getItem("user"));
-      const userId = user?.id;
-
-      // If userId is not found, stop and show error
-      if (!userId) {
-        console.warn("⚠️ No userId found, backend must infer from token");
-      }
-
-      // 3️ Build URL: if userId exists → send as query param
-      const url = userId
-        ? `http://localhost:5000/api/detections/history?userId=${userId}`
-        : `http://localhost:5000/api/detections/history`;
-
-      // 4️ Call API
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-// Pick latest based on createdAt
-const latest = Array.isArray(data)
-  ? data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0]
-  : data;
-
-if (!latest) {
-  setError("No detection data found");
-  setLoading(false);
-  return;
-}
-
-processChartData([latest]); // send only one record
-
-      setLoading(false);
-    } catch (err) {
-      console.error("Error fetching detection history:", err);
-      setError(`Failed to fetch detection history: ${err.message}`);
-      setLoading(false);
-    }
-  };
-
-  fetchHistory();
-}, []);
+    fetchHistory();
+  }, []);
 
   const processChartData = (data) => {
     const counts = {};
@@ -124,8 +117,8 @@ processChartData([latest]); // send only one record
     }
 
     const colors = [
-      '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', 
-      '#FFEAA7', '#DDA0DD', '#F39C12', '#E74C3C'
+      '#5eb8b8', '#7ec8c8', '#4a9999', '#96d4d4', 
+      '#6fcfcf', '#3d8888', '#88dbdb', '#2d7777'
     ];
 
     const totalDetections = Object.values(counts).reduce((a, b) => a + b, 0);
@@ -144,6 +137,7 @@ processChartData([latest]); // send only one record
     setConfidenceData({
       labels: Object.keys(confidenceStats),
       data: avgConfidences,
+      colors: colors.slice(0, Object.keys(confidenceStats).length)
     });
 
     const sortedDates = Object.keys(timeline).sort((a, b) => new Date(a) - new Date(b));
@@ -153,36 +147,32 @@ processChartData([latest]); // send only one record
     });
   };
 
-  // CSS-only bar chart component
+  // Bar chart component
   const CSSBarChart = ({ data, title }) => {
     if (!data) return null;
     
     const maxValue = Math.max(...data.data);
     
     return (
-      <div className="css-chart">
-        <h3 className="text-lg font-semibold mb-4 text-center">{title}</h3>
-        <div className="flex items-end justify-center space-x-2 h-64 p-4">
+      <div className="chart-container">
+        <h3 className="chart-title">{title}</h3>
+        <div className="bar-chart-wrapper">
           {data.labels.map((label, index) => {
             const value = data.data[index];
-            const height = (value / maxValue) * 200;
+            const heightPercent = (value / maxValue) * 100;
             const color = data.colors[index];
             
             return (
-              <div key={label} className="flex flex-col items-center">
-                <div className="text-xs font-medium mb-1">{value}</div>
+              <div key={label} className="bar-item">
+                <div className="bar-value">{value}</div>
                 <div
-                  className="rounded-t-lg flex items-end justify-center text-white text-xs font-bold transition-all duration-300 hover:opacity-80"
+                  className="bar-column"
                   style={{
                     backgroundColor: color,
-                    height: `${height}px`,
-                    width: '40px',
-                    minHeight: '20px'
+                    height: `${heightPercent}%`,
                   }}
                 />
-                <div className="text-xs mt-2 text-center capitalize max-w-12 break-words">
-                  {label}
-                </div>
+                <div className="bar-label">{label}</div>
               </div>
             );
           })}
@@ -191,106 +181,135 @@ processChartData([latest]); // send only one record
     );
   };
 
-  // CSS-only pie chart component
+  // Pie chart component (FIXED)
   const CSSPieChart = ({ data, title }) => {
     if (!data) return null;
     
     const total = data.data.reduce((a, b) => a + b, 0);
-    let currentAngle = 0;
+    
+    // Create segments for the pie chart
+    const segments = data.labels.map((label, index) => {
+      const value = data.data[index];
+      const percentage = (value / total) * 100;
+      return {
+        label,
+        value,
+        percentage: percentage.toFixed(1),
+        color: data.colors[index]
+      };
+    });
     
     return (
-      <div className="css-chart">
-        <h3 className="text-lg font-semibold mb-4 text-center">{title}</h3>
-        <div className="flex items-center justify-center">
-          <div className="relative w-64 h-64">
-            <div className="w-full h-full rounded-full overflow-hidden">
-              {data.labels.map((label, index) => {
-                const value = data.data[index];
-                const percentage = (value / total) * 100;
-                const angle = (value / total) * 360;
-                
-                const slice = (
-                  <div
-                    key={label}
-                    className="absolute inset-0"
-                    style={{
-                      background: `conic-gradient(from ${currentAngle}deg, ${data.colors[index]} 0deg, ${data.colors[index]} ${angle}deg, transparent ${angle}deg)`,
-                      borderRadius: '50%'
-                    }}
-                  />
-                );
-                
-                currentAngle += angle;
-                return slice;
-              })}
-            </div>
-          </div>
-          <div className="ml-8">
-            {data.labels.map((label, index) => {
-              const value = data.data[index];
-              const percentage = ((value / total) * 100).toFixed(1);
+      <div className="chart-container">
+        <h3 className="chart-title">{title}</h3>
+        <div className="pie-chart-wrapper">
+          <div className="pie-chart">
+            {segments.map((segment, index) => {
+              // Calculate the rotation for each segment
+              const previousTotal = segments.slice(0, index).reduce((sum, s) => sum + parseFloat(s.percentage), 0);
+              const rotation = (previousTotal / 100) * 360;
+              const segmentDegrees = (parseFloat(segment.percentage) / 100) * 360;
               
               return (
-                <div key={label} className="flex items-center mb-2">
-                  <div
-                    className="w-4 h-4 rounded mr-2"
-                    style={{ backgroundColor: data.colors[index] }}
-                  />
-                  <span className="text-sm capitalize">
-                    {label}: {value} ({percentage}%)
-                  </span>
-                </div>
+                <div
+                  key={segment.label}
+                  className="pie-segment"
+                  style={{
+                    '--rotation': `${rotation}deg`,
+                    '--segment-degrees': `${segmentDegrees}deg`,
+                    '--segment-color': segment.color
+                  }}
+                />
               );
             })}
+          </div>
+          <div className="pie-legend">
+            {segments.map((segment) => (
+              <div key={segment.label} className="legend-item">
+                <div
+                  className="legend-color"
+                  style={{ backgroundColor: segment.color }}
+                />
+                <span className="legend-text">
+                  {segment.label}: {segment.value} ({segment.percentage}%)
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
     );
   };
 
-  // Line chart component
+  // Line chart component (FIXED)
   const CSSLineChart = ({ data, title }) => {
-    if (!data) return null;
+    if (!data || !data.data || data.data.length === 0) return null;
     
     const maxValue = Math.max(...data.data);
-    const points = data.data.map((value, index) => {
-      const x = (index / (data.data.length - 1)) * 100;
-      const y = 100 - (value / maxValue) * 80;
-      return `${x},${y}`;
-    }).join(' ');
+    const minValue = Math.min(...data.data);
+    const range = maxValue - minValue || 1;
     
     return (
-      <div className="css-chart">
-        <h3 className="text-lg font-semibold mb-4 text-center">{title}</h3>
-        <div className="flex justify-center">
-          <svg viewBox="0 0 100 100" className="w-96 h-64 border border-gray-300">
+      <div className="chart-container">
+        <h3 className="chart-title">{title}</h3>
+        <div className="line-chart-wrapper">
+          <svg viewBox="0 0 400 200" className="line-chart-svg">
+            {/* Grid lines */}
+            {[0, 1, 2, 3, 4].map(i => (
+              <line
+                key={i}
+                x1="0"
+                y1={i * 40}
+                x2="400"
+                y2={i * 40}
+                className="grid-line"
+              />
+            ))}
+            
+            {/* Line path */}
             <polyline
               fill="none"
-              stroke="#4ECDC4"
-              strokeWidth="2"
-              points={points}
+              stroke="#5eb8b8"
+              strokeWidth="3"
+              points={data.data.map((value, index) => {
+                const x = (index / (data.data.length - 1)) * 380 + 10;
+                const y = 180 - ((value - minValue) / range) * 160;
+                return `${x},${y}`;
+              }).join(' ')}
             />
+            
+            {/* Data points */}
             {data.data.map((value, index) => {
-              const x = (index / (data.data.length - 1)) * 100;
-              const y = 100 - (value / maxValue) * 80;
+              const x = (index / (data.data.length - 1)) * 380 + 10;
+              const y = 180 - ((value - minValue) / range) * 160;
               return (
-                <circle
-                  key={index}
-                  cx={x}
-                  cy={y}
-                  r="2"
-                  fill="#4ECDC4"
-                />
+                <g key={index}>
+                  <circle
+                    cx={x}
+                    cy={y}
+                    r="5"
+                    fill="#5eb8b8"
+                    className="data-point"
+                  />
+                  <text
+                    x={x}
+                    y={y - 10}
+                    className="data-label"
+                    textAnchor="middle"
+                  >
+                    {value}
+                  </text>
+                </g>
               );
             })}
           </svg>
-        </div>
-        <div className="flex justify-between mt-2 px-8">
-          {data.labels.map((label, index) => (
-            <span key={index} className="text-xs text-gray-600">
-              {label}
-            </span>
-          ))}
+          <div className="timeline-labels">
+            {data.labels.map((label, index) => (
+              <span key={index} className="timeline-label">
+                {label}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -298,25 +317,25 @@ processChartData([latest]); // send only one record
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-        <span className="ml-3 text-gray-600">Loading charts...</span>
+      <div className="detection-chart-loading">
+        <div className="loading-spinner"></div>
+        <span className="loading-text">Loading charts...</span>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="p-6 bg-red-50 border border-red-200 rounded-lg">
-        <p className="text-red-600">{error}</p>
+      <div className="detection-chart-error">
+        <p className="error-text">{error}</p>
       </div>
     );
   }
 
   if (!chartData) {
     return (
-      <div className="p-6 bg-yellow-50 border border-yellow-200 rounded-lg">
-        <p className="text-yellow-600">No detection data available</p>
+      <div className="detection-chart-warning">
+        <p className="warning-text">No detection data available</p>
       </div>
     );
   }
@@ -337,11 +356,11 @@ processChartData([latest]); // send only one record
   };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-lg">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Detection Analytics Dashboard</h2>
+    <div className="detection-chart-container">
+      <div className="chart-header">
+        <h2 className="dashboard-title">Detection Analytics Dashboard</h2>
         
-        <div className="flex flex-wrap gap-2 mb-4">
+        <div className="chart-buttons">
           {[
             { key: 'bar', label: 'Bar Chart', icon: '📊' },
             { key: 'pie', label: 'Pie Chart', icon: '🥧' },
@@ -351,51 +370,46 @@ processChartData([latest]); // send only one record
             <button
               key={key}
               onClick={() => setActiveChart(key)}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                activeChart === key
-                  ? 'bg-blue-500 text-white shadow-md'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
+              className={`chart-button ${activeChart === key ? 'active' : ''}`}
             >
-              {icon} {label}
+              <span className="button-icon">{icon}</span>
+              <span className="button-label">{label}</span>
             </button>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-            <h3 className="text-sm font-medium text-blue-600">Total Detections</h3>
-            <p className="text-2xl font-bold text-blue-800">
-              {chartData.totalCount}
-            </p>
+        <div className="stats-grid">
+          <div className="stat-card stat-total">
+            <h3 className="stat-title">Total Detections</h3>
+            <p className="stat-value">{chartData.totalCount}</p>
           </div>
-          <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-            <h3 className="text-sm font-medium text-green-600">Detection Types</h3>
-            <p className="text-2xl font-bold text-green-800">{chartData.labels.length}</p>
+          <div className="stat-card stat-types">
+            <h3 className="stat-title">Detection Types</h3>
+            <p className="stat-value">{chartData.labels.length}</p>
           </div>
-          <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-            <h3 className="text-sm font-medium text-purple-600">Most Common</h3>
-            <p className="text-lg font-bold text-purple-800 capitalize">
+          <div className="stat-card stat-common">
+            <h3 className="stat-title">Most Common</h3>
+            <p className="stat-value">
               {chartData.labels[chartData.data.indexOf(Math.max(...chartData.data))]}
             </p>
           </div>
         </div>
       </div>
 
-      <div className="bg-gray-50 p-4 rounded-lg mb-6">
+      <div className="chart-display">
         {renderChart()}
       </div>
 
-      <div className="mt-6">
-        <h3 className="text-lg font-semibold mb-3">Detection Summary</h3>
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-            <thead className="bg-gray-50">
+      <div className="summary-section">
+        <h3 className="summary-title">Detection Summary</h3>
+        <div className="table-wrapper">
+          <table className="summary-table">
+            <thead>
               <tr>
-                <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Detection Type</th>
-                <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Count</th>
-                <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Percentage</th>
-                <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Color</th>
+                <th>Detection Type</th>
+                <th>Count</th>
+                <th>Percentage</th>
+                <th>Color</th>
               </tr>
             </thead>
             <tbody>
@@ -406,13 +420,13 @@ processChartData([latest]); // send only one record
                 const color = chartData.colors[index];
                 
                 return (
-                  <tr key={label} className="border-t border-gray-200">
-                    <td className="px-4 py-2 text-sm text-gray-800 capitalize">{label}</td>
-                    <td className="px-4 py-2 text-sm text-gray-800">{count}</td>
-                    <td className="px-4 py-2 text-sm text-gray-800">{percentage}%</td>
-                    <td className="px-4 py-2 text-sm text-gray-800">
+                  <tr key={label}>
+                    <td className="td-label">{label}</td>
+                    <td>{count}</td>
+                    <td>{percentage}%</td>
+                    <td>
                       <div 
-                        className="w-6 h-4 rounded border border-gray-300"
+                        className="color-box"
                         style={{ backgroundColor: color }}
                       ></div>
                     </td>
