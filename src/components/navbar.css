@@ -1,333 +1,350 @@
-/* ========================================
-   NAVBAR STYLES - OPTIMIZED
-   ======================================== */
-
-/* Main Navbar Container */
+/* Navbar Styles */
 .navbar {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  background: linear-gradient(135deg, #5eb8b8, #4a9999);
-  padding: 0.875rem 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  position: fixed;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: sticky;
   top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-  transition: all 0.3s ease;
-  height: 70px;
+  z-index: 100;
 }
 
-/* Left: Company Name */
-.navbar-left {
-  flex: 0 0 auto;
-  min-width: 180px;
-}
-
-.company-name {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #fff;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
+.navbar-left .company-name {
+  color: white;
+  font-size: 1.8rem;
+  font-weight: bold;
   margin: 0;
-  cursor: pointer;
-  transition: transform 0.3s ease;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  letter-spacing: 1px;
 }
 
-.company-name:hover {
-  transform: scale(1.05);
-}
-
-/* Center: Search Bar Container */
 .navbar-center {
   flex: 1;
-  display: flex;
-  justify-content: center;
-  padding: 0 1rem;
+  max-width: 600px;
+  margin: 0 2rem;
 }
 
 .search-bar {
   display: flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.15);
+  background: white;
   border-radius: 50px;
-  padding: 0.5rem 1.25rem;
-  width: 100%;
-  max-width: 500px;
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  transition: all 0.3s ease;
-}
-
-.search-bar:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s;
 }
 
 .search-bar:focus-within {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: #ffcc00;
-  box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.2);
+  transform: scale(1.02);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .search-bar input {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
   border: none;
-  background: transparent;
   outline: none;
-  width: 100%;
-  font-size: 0.95rem;
-  color: #fff;
-  padding: 0.25rem 0.5rem;
-}
-
-.search-bar input::placeholder {
-  color: rgba(255, 255, 255, 0.75);
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .search-button {
-  background: #ffcc00;
-  color: #000;
+  background: transparent;
   border: none;
-  padding: 0.5rem;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+  padding: 0.75rem 1.5rem;
   cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  flex-shrink: 0;
+  font-size: 1.2rem;
+  transition: transform 0.2s;
 }
 
 .search-button:hover {
-  transform: scale(1.1) rotate(15deg);
-  background: #ffd633;
-  box-shadow: 0 4px 8px rgba(255, 204, 0, 0.3);
+  transform: scale(1.2);
 }
 
-.search-button:active {
-  transform: scale(0.95);
-}
-
-/* Right: User Info & Logout */
 .navbar-right {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  flex: 0 0 auto;
-  min-width: 220px;
-  justify-content: flex-end;
+  gap: 1.5rem;
 }
 
 .user-name {
-  font-size: 0.95rem;
-  font-weight: 600;
   color: white;
-  white-space: nowrap;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  font-weight: 500;
+  font-size: 1rem;
 }
 
 .logout-button {
-  background: #ffcc00;
-  color: #1a1a1a;
-  border: none;
-  padding: 0.5rem 1.25rem;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid white;
+  padding: 0.5rem 1.5rem;
   border-radius: 25px;
   cursor: pointer;
-  font-weight: 700;
-  font-size: 0.875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: all 0.3s ease;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
-  white-space: nowrap;
+  font-weight: 600;
+  transition: all 0.3s;
 }
 
 .logout-button:hover {
-  background: #ffd633;
+  background: white;
+  color: #667eea;
   transform: translateY(-2px);
-  box-shadow: 0 5px 12px rgba(255, 204, 0, 0.4);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.logout-button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(255, 204, 0, 0.3);
+/* Search Modal Overlay */
+.search-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
 }
 
-/* ========================================
-   RESPONSIVE DESIGN
-   ======================================== */
-
-/* Large Tablets */
-@media (max-width: 1024px) {
-  .navbar {
-    padding: 0.75rem 1.25rem;
-    height: 65px;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-
-  .company-name {
-    font-size: 1.35rem;
-  }
-
-  .search-bar {
-    max-width: 400px;
-  }
-
-  .user-name {
-    font-size: 0.9rem;
+  to {
+    opacity: 1;
   }
 }
 
-/* Tablets */
+.search-modal {
+  background: white;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 1200px;
+  max-height: 85vh;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.close-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-button:hover {
+  background: white;
+  color: #667eea;
+  transform: rotate(90deg);
+}
+
+.modal-content {
+  padding: 2rem;
+  max-height: calc(85vh - 80px);
+  overflow-y: auto;
+}
+
+/* Loading State */
+.search-status {
+  text-align: center;
+  padding: 3rem;
+  color: #667eea;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Error State */
+.search-error {
+  background: #fee;
+  border: 2px solid #fcc;
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+  color: #c33;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.search-error span {
+  font-size: 2rem;
+}
+
+/* Product Grid */
+.search-results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.product-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 15px;
+  overflow: hidden;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  border-color: #667eea;
+}
+
+.product-image {
+  width: 100%;
+  height: 200px;
+  background: #f8f8f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.no-image {
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.product-info {
+  padding: 1.25rem;
+}
+
+.product-brand {
+  color: #667eea;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 0.5rem 0;
+}
+
+.product-name {
+  font-size: 1rem;
+  margin: 0 0 1rem 0;
+  color: #333;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.8em;
+}
+
+.product-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.product-price {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.product-rating {
+  background: #fff4e6;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+.view-product-btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.75rem;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.view-product-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
   .navbar {
-    padding: 0.75rem 1rem;
-    height: auto;
-    min-height: 65px;
-  }
-
-  .navbar-left {
-    min-width: auto;
-  }
-
-  .company-name {
-    font-size: 1.25rem;
+    flex-direction: column;
+    gap: 1rem;
   }
 
   .navbar-center {
-    padding: 0 0.75rem;
+    width: 100%;
+    margin: 0;
   }
 
-  .search-bar {
-    max-width: 350px;
-    padding: 0.4rem 1rem;
+  .search-results-grid {
+    grid-template-columns: 1fr;
   }
 
-  .search-bar input {
-    font-size: 0.875rem;
-  }
-
-  .navbar-right {
-    min-width: auto;
-    gap: 0.75rem;
-  }
-
-  .user-name {
-    font-size: 0.85rem;
-  }
-
-  .logout-button {
-    padding: 0.45rem 1rem;
-    font-size: 0.8rem;
-  }
-}
-
-/* Small Tablets and Large Phones */
-@media (max-width: 640px) {
-  .navbar {
-    flex-wrap: wrap;
-    padding: 0.75rem;
-    gap: 0.75rem;
-  }
-
-  .navbar-left {
-    flex: 1;
-  }
-
-  .company-name {
-    font-size: 1.15rem;
-  }
-
-  .navbar-right {
-    flex: 0 0 auto;
-    order: 2;
-  }
-
-  .navbar-center {
-    flex: 1 1 100%;
-    order: 3;
-    padding: 0;
-  }
-
-  .search-bar {
-    max-width: 100%;
-  }
-}
-
-/* Mobile Phones */
-@media (max-width: 480px) {
-  .navbar {
-    padding: 0.625rem;
-    gap: 0.5rem;
-  }
-
-  .company-name {
-    font-size: 1rem;
-    letter-spacing: 1px;
-  }
-
-  .search-bar {
-    padding: 0.375rem 0.875rem;
-  }
-
-  .search-bar input {
-    font-size: 0.8rem;
-  }
-
-  .search-bar input::placeholder {
-    font-size: 0.8rem;
-  }
-
-  .search-button {
-    width: 32px;
-    height: 32px;
-    font-size: 1rem;
-  }
-
-  .user-name {
-    font-size: 0.8rem;
-  }
-
-  .logout-button {
-    padding: 0.4rem 0.875rem;
-    font-size: 0.75rem;
-  }
-}
-
-/* Very Small Phones */
-@media (max-width: 360px) {
-  .company-name {
-    font-size: 0.9rem;
-  }
-
-  .user-name {
-    display: none; /* Hide username on very small screens */
-  }
-
-  .logout-button {
-    padding: 0.375rem 0.75rem;
-  }
-}
-
-/* Add space for fixed navbar */
-body {
-  padding-top: 70px;
-}
-
-@media (max-width: 1024px) {
-  body {
-    padding-top: 65px;
-  }
-}
-
-@media (max-width: 640px) {
-  body {
-    padding-top: 120px; /* Extra space for wrapped navbar */
+  .search-modal {
+    width: 95%;
+    max-height: 90vh;
   }
 }
