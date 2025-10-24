@@ -3,11 +3,8 @@ import "./detectionChart.css";
 
 const DetectionChart = () => {
   const [chartData, setChartData] = useState(null);
-  const [timelineData, setTimelineData] = useState(null);
-  const [confidenceData, setConfidenceData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeChart, setActiveChart] = useState('bar');
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -70,8 +67,6 @@ const DetectionChart = () => {
 
   const processChartData = (data) => {
     const counts = {};
-    const confidenceStats = {};
-    const timeline = {};
     
     data.forEach(item => {
       if (!item.detections) return;
@@ -88,27 +83,8 @@ const DetectionChart = () => {
         Object.keys(parsed.summary).forEach(cls => {
           const summary = parsed.summary[cls];
           counts[cls] = (counts[cls] || 0) + summary.count;
-          
-          if (!confidenceStats[cls]) {
-            confidenceStats[cls] = {
-              total: 0,
-              count: 0,
-              min: summary.min_conf,
-              max: summary.max_conf
-            };
-          }
-          confidenceStats[cls].total += summary.avg_conf * summary.count;
-          confidenceStats[cls].count += summary.count;
-          confidenceStats[cls].min = Math.min(confidenceStats[cls].min, summary.min_conf);
-          confidenceStats[cls].max = Math.max(confidenceStats[cls].max, summary.max_conf);
         });
       }
-
-      const date = new Date(item.createdAt).toLocaleDateString();
-      if (!timeline[date]) {
-        timeline[date] = 0;
-      }
-      timeline[date] += Object.values(parsed.summary || {}).reduce((sum, s) => sum + s.count, 0);
     });
 
     if (Object.keys(counts).length === 0) {
@@ -117,8 +93,8 @@ const DetectionChart = () => {
     }
 
     const colors = [
-      '#5eb8b8', '#7ec8c8', '#4a9999', '#96d4d4', 
-      '#6fcfcf', '#3d8888', '#88dbdb', '#2d7777'
+      '#5eb8b8', '#ff6b9d', '#ffa94d', '#9775fa',
+      '#4a9999', '#f06595', '#ff922b', '#845ef7'
     ];
 
     const totalDetections = Object.values(counts).reduce((a, b) => a + b, 0);
@@ -128,22 +104,6 @@ const DetectionChart = () => {
       data: Object.values(counts),
       colors: colors.slice(0, Object.keys(counts).length),
       totalCount: totalDetections
-    });
-
-    const avgConfidences = Object.keys(confidenceStats).map(cls => 
-      Math.round((confidenceStats[cls].total / confidenceStats[cls].count) * 100) / 100
-    );
-    
-    setConfidenceData({
-      labels: Object.keys(confidenceStats),
-      data: avgConfidences,
-      colors: colors.slice(0, Object.keys(confidenceStats).length)
-    });
-
-    const sortedDates = Object.keys(timeline).sort((a, b) => new Date(a) - new Date(b));
-    setTimelineData({
-      labels: sortedDates,
-      data: sortedDates.map(date => timeline[date]),
     });
   };
 
@@ -181,13 +141,12 @@ const DetectionChart = () => {
     );
   };
 
-  // Pie chart component (FIXED)
+  // Pie chart component
   const CSSPieChart = ({ data, title }) => {
     if (!data) return null;
     
     const total = data.data.reduce((a, b) => a + b, 0);
     
-    // Create segments for the pie chart
     const segments = data.labels.map((label, index) => {
       const value = data.data[index];
       const percentage = (value / total) * 100;
@@ -205,7 +164,6 @@ const DetectionChart = () => {
         <div className="pie-chart-wrapper">
           <div className="pie-chart">
             {segments.map((segment, index) => {
-              // Calculate the rotation for each segment
               const previousTotal = segments.slice(0, index).reduce((sum, s) => sum + parseFloat(s.percentage), 0);
               const rotation = (previousTotal / 100) * 360;
               const segmentDegrees = (parseFloat(segment.percentage) / 100) * 360;
@@ -241,85 +199,11 @@ const DetectionChart = () => {
     );
   };
 
-  // Line chart component (FIXED)
-  const CSSLineChart = ({ data, title }) => {
-    if (!data || !data.data || data.data.length === 0) return null;
-    
-    const maxValue = Math.max(...data.data);
-    const minValue = Math.min(...data.data);
-    const range = maxValue - minValue || 1;
-    
-    return (
-      <div className="chart-container">
-        <h3 className="chart-title">{title}</h3>
-        <div className="line-chart-wrapper">
-          <svg viewBox="0 0 400 200" className="line-chart-svg">
-            {/* Grid lines */}
-            {[0, 1, 2, 3, 4].map(i => (
-              <line
-                key={i}
-                x1="0"
-                y1={i * 40}
-                x2="400"
-                y2={i * 40}
-                className="grid-line"
-              />
-            ))}
-            
-            {/* Line path */}
-            <polyline
-              fill="none"
-              stroke="#5eb8b8"
-              strokeWidth="3"
-              points={data.data.map((value, index) => {
-                const x = (index / (data.data.length - 1)) * 380 + 10;
-                const y = 180 - ((value - minValue) / range) * 160;
-                return `${x},${y}`;
-              }).join(' ')}
-            />
-            
-            {/* Data points */}
-            {data.data.map((value, index) => {
-              const x = (index / (data.data.length - 1)) * 380 + 10;
-              const y = 180 - ((value - minValue) / range) * 160;
-              return (
-                <g key={index}>
-                  <circle
-                    cx={x}
-                    cy={y}
-                    r="5"
-                    fill="#5eb8b8"
-                    className="data-point"
-                  />
-                  <text
-                    x={x}
-                    y={y - 10}
-                    className="data-label"
-                    textAnchor="middle"
-                  >
-                    {value}
-                  </text>
-                </g>
-              );
-            })}
-          </svg>
-          <div className="timeline-labels">
-            {data.labels.map((label, index) => (
-              <span key={index} className="timeline-label">
-                {label}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   if (loading) {
     return (
       <div className="detection-chart-loading">
         <div className="loading-spinner"></div>
-        <span className="loading-text">Loading charts...</span>
+        <span className="loading-text">Loading your skin analysis...</span>
       </div>
     );
   }
@@ -327,7 +211,9 @@ const DetectionChart = () => {
   if (error) {
     return (
       <div className="detection-chart-error">
+        <div className="error-icon">⚠️</div>
         <p className="error-text">{error}</p>
+        <p className="error-hint">Please upload a photo first to see your analysis</p>
       </div>
     );
   }
@@ -335,81 +221,71 @@ const DetectionChart = () => {
   if (!chartData) {
     return (
       <div className="detection-chart-warning">
+        <div className="warning-icon">📊</div>
         <p className="warning-text">No detection data available</p>
+        <p className="warning-hint">Upload a photo to see your personalized skin analysis</p>
       </div>
     );
   }
 
-  const renderChart = () => {
-    switch (activeChart) {
-      case 'bar':
-        return <CSSBarChart data={chartData} title="Detection Count by Type" />;
-      case 'pie':
-        return <CSSPieChart data={chartData} title="Detection Distribution" />;
-      case 'timeline':
-        return <CSSLineChart data={timelineData} title="Detections Over Time" />;
-      case 'confidence':
-        return <CSSBarChart data={confidenceData} title="Average Confidence by Type" />;
-      default:
-        return <CSSBarChart data={chartData} title="Detection Count by Type" />;
-    }
-  };
-
   return (
     <div className="detection-chart-container">
       <div className="chart-header">
-        <h2 className="dashboard-title">Detection Analytics Dashboard</h2>
-        
-        <div className="chart-buttons">
-          {[
-            { key: 'bar', label: 'Bar Chart', icon: '📊' },
-            { key: 'pie', label: 'Pie Chart', icon: '🥧' },
-            { key: 'timeline', label: 'Timeline', icon: '📈' },
-            { key: 'confidence', label: 'Confidence', icon: '🎯' }
-          ].map(({ key, label, icon }) => (
-            <button
-              key={key}
-              onClick={() => setActiveChart(key)}
-              className={`chart-button ${activeChart === key ? 'active' : ''}`}
-            >
-              <span className="button-icon">{icon}</span>
-              <span className="button-label">{label}</span>
-            </button>
-          ))}
-        </div>
+        <h2 className="dashboard-title">Your Skin Analysis Dashboard</h2>
+        <p className="dashboard-subtitle">Visual breakdown of detected skin concerns</p>
 
+        {/* Stats Cards */}
         <div className="stats-grid">
           <div className="stat-card stat-total">
-            <h3 className="stat-title">Total Detections</h3>
-            <p className="stat-value">{chartData.totalCount}</p>
+            <div className="stat-icon">🎯</div>
+            <div className="stat-content">
+              <h3 className="stat-title">Total Detections</h3>
+              <p className="stat-value">{chartData.totalCount}</p>
+            </div>
           </div>
           <div className="stat-card stat-types">
-            <h3 className="stat-title">Detection Types</h3>
-            <p className="stat-value">{chartData.labels.length}</p>
+            <div className="stat-icon">🔍</div>
+            <div className="stat-content">
+              <h3 className="stat-title">Concern Types</h3>
+              <p className="stat-value">{chartData.labels.length}</p>
+            </div>
           </div>
           <div className="stat-card stat-common">
-            <h3 className="stat-title">Most Common</h3>
-            <p className="stat-value">
-              {chartData.labels[chartData.data.indexOf(Math.max(...chartData.data))]}
-            </p>
+            <div className="stat-icon">⭐</div>
+            <div className="stat-content">
+              <h3 className="stat-title">Primary Concern</h3>
+              <p className="stat-value">
+                {chartData.labels[chartData.data.indexOf(Math.max(...chartData.data))]}
+              </p>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="chart-display">
-        {renderChart()}
+      {/* Side-by-Side Charts */}
+      <div className="charts-grid">
+        <div className="chart-card">
+          <CSSBarChart data={chartData} title="Detection Count" />
+        </div>
+        <div className="chart-card">
+          <CSSPieChart data={chartData} title="Distribution Breakdown" />
+        </div>
       </div>
 
+      {/* Summary Table */}
       <div className="summary-section">
-        <h3 className="summary-title">Detection Summary</h3>
+        <h3 className="summary-title">
+          <span className="title-icon">📋</span>
+          Detailed Summary
+        </h3>
         <div className="table-wrapper">
           <table className="summary-table">
             <thead>
               <tr>
-                <th>Detection Type</th>
+                <th>Skin Concern</th>
                 <th>Count</th>
                 <th>Percentage</th>
-                <th>Color</th>
+                <th>Severity</th>
               </tr>
             </thead>
             <tbody>
@@ -419,16 +295,28 @@ const DetectionChart = () => {
                 const percentage = ((count / total) * 100).toFixed(1);
                 const color = chartData.colors[index];
                 
+                // Calculate severity level
+                let severity = "Low";
+                if (percentage > 40) severity = "High";
+                else if (percentage > 20) severity = "Medium";
+                
                 return (
                   <tr key={label}>
-                    <td className="td-label">{label}</td>
-                    <td>{count}</td>
-                    <td>{percentage}%</td>
+                    <td className="td-label">
+                      <div className="label-with-color">
+                        <div 
+                          className="color-indicator"
+                          style={{ backgroundColor: color }}
+                        />
+                        {label}
+                      </div>
+                    </td>
+                    <td className="td-count">{count}</td>
+                    <td className="td-percentage">{percentage}%</td>
                     <td>
-                      <div 
-                        className="color-box"
-                        style={{ backgroundColor: color }}
-                      ></div>
+                      <span className={`severity-badge severity-${severity.toLowerCase()}`}>
+                        {severity}
+                      </span>
                     </td>
                   </tr>
                 );
