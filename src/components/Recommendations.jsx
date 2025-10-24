@@ -53,6 +53,16 @@ const Recommendations = () => {
     fetchRecommendations();
   }, []);
 
+  // ✅ Create Sephora search URL with product name (same as navbar)
+  const getSephoraSearchUrl = (product) => {
+    const brandName = product.brand || "";
+    const productName = product.name || "";
+    const searchTerm = encodeURIComponent(`${brandName} ${productName}`);
+    
+    // Canadian Sephora with auto-search
+    return `https://www.sephora.com/ca/en/search?keyword=${searchTerm}`;
+  };
+
   if (loading) {
     return (
       <div className="recommendations-container">
@@ -129,8 +139,9 @@ const Recommendations = () => {
 
                       <div className="product-footer">
                         <p className="product-price">{product.price}</p>
+                        {/* ✅ Fixed: Now uses smart search URL instead of broken product URL */}
                         <a
-                          href={product.url}
+                          href={getSephoraSearchUrl(product)}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="product-button"

@@ -1,110 +1,60 @@
 /* ========================================
-   DETECTION CHART STYLES
+   MAIN CONTAINER
    ======================================== */
 
-/* Main Container */
 .detection-chart-container {
-  padding: 1.5rem;
-  background: linear-gradient(135deg, #ffffff 0%, #f0fafa 100%);
-  border-radius: 1rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8fbfb 0%, #e8f5f5 100%);
+  min-height: 100vh;
 }
 
-/* Header Section */
+/* ========================================
+   HEADER SECTION
+   ======================================== */
+
 .chart-header {
-  margin-bottom: 1.5rem;
-}
-
-.dashboard-title {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #1a4d4d;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2.5rem;
   text-align: center;
 }
 
-/* Chart Buttons - Each with unique color */
-.chart-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
-  justify-content: center;
+.dashboard-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #5eb8b8, #9775fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.5px;
 }
 
-.chart-button {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.25rem;
-  background-color: white;
-  color: #2c5454;
-  font-size: 0.875rem;
-  font-weight: 600;
-  border: 2px solid #d0ebeb;
-  border-radius: 0.75rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+.dashboard-subtitle {
+  font-size: 1rem;
+  color: #64748b;
+  font-weight: 500;
+  margin-bottom: 2rem;
 }
 
-.chart-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+/* ========================================
+   STATS CARDS
+   ======================================== */
 
-/* Individual button colors when active */
-.chart-button:nth-child(1).active {
-  background: linear-gradient(135deg, #5eb8b8, #4a9999);
-  color: white;
-  border-color: #4a9999;
-  box-shadow: 0 4px 12px rgba(94, 184, 184, 0.4);
-}
-
-.chart-button:nth-child(2).active {
-  background: linear-gradient(135deg, #ff6b9d, #f06595);
-  color: white;
-  border-color: #f06595;
-  box-shadow: 0 4px 12px rgba(255, 107, 157, 0.4);
-}
-
-.chart-button:nth-child(3).active {
-  background: linear-gradient(135deg, #ffa94d, #ff922b);
-  color: white;
-  border-color: #ff922b;
-  box-shadow: 0 4px 12px rgba(255, 169, 77, 0.4);
-}
-
-.chart-button:nth-child(4).active {
-  background: linear-gradient(135deg, #9775fa, #845ef7);
-  color: white;
-  border-color: #845ef7;
-  box-shadow: 0 4px 12px rgba(151, 117, 250, 0.4);
-}
-
-.button-icon {
-  font-size: 1.125rem;
-}
-
-.button-label {
-  white-space: nowrap;
-  font-weight: 600;
-}
-
-/* Stats Grid - Each with unique gradient */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
 }
 
 .stat-card {
-  padding: 1.25rem;
-  border-radius: 1rem;
-  border: 2px solid;
-  transition: all 0.3s ease;
   background: white;
+  padding: 1.75rem;
+  border-radius: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  border: 2px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
 }
@@ -120,12 +70,8 @@
 }
 
 .stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-}
-
-.stat-card:hover::before {
-  height: 6px;
+  transform: translateY(-8px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
 }
 
 .stat-total {
@@ -145,52 +91,75 @@
 }
 
 .stat-common {
-  border-color: #ffe4cc;
+  border-color: #e9d5ff;
 }
 
 .stat-common::before {
-  background: linear-gradient(90deg, #ffa94d, #ffc078);
+  background: linear-gradient(90deg, #9775fa, #b197fc);
+}
+
+.stat-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.stat-content {
+  flex: 1;
 }
 
 .stat-title {
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  color: #64748b;
+  color: #94a3b8;
   margin-bottom: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .stat-value {
-  font-size: 1.875rem;
-  font-weight: 700;
-  color: #1a4d4d;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1e293b;
   text-transform: capitalize;
+  line-height: 1;
 }
 
-/* Chart Display Area */
-.chart-display {
+/* ========================================
+   CHARTS GRID (SIDE BY SIDE)
+   ======================================== */
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.chart-card {
   background: white;
-  padding: 2rem;
-  border-radius: 1rem;
-  margin-bottom: 1.5rem;
-  min-height: 420px;
-  border: 2px solid #e8f5f5;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 2.5rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 2px solid #f1f5f9;
+  transition: all 0.3s ease;
 }
 
-/* Chart Container */
-.chart-container {
-  width: 100%;
-  height: 100%;
+.chart-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
 }
+
+/* ========================================
+   CHART TITLE
+   ======================================== */
 
 .chart-title {
   font-size: 1.5rem;
   font-weight: 700;
   text-align: center;
-  color: #1a4d4d;
-  margin-bottom: 2rem;
+  color: #1e293b;
+  margin-bottom: 2.5rem;
   position: relative;
   padding-bottom: 1rem;
 }
@@ -201,14 +170,14 @@
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 100px;
-  height: 3px;
-  background: linear-gradient(90deg, #5eb8b8, #ff6b9d);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #5eb8b8, #9775fa);
   border-radius: 2px;
 }
 
 /* ========================================
-   BAR CHART STYLES - Colorful Bars
+   BAR CHART
    ======================================== */
 
 .bar-chart-wrapper {
@@ -218,8 +187,8 @@
   gap: 1.5rem;
   height: 320px;
   padding: 1.5rem;
-  background: linear-gradient(to top, #f9fafa 0%, transparent 100%);
-  border-radius: 0.5rem;
+  background: linear-gradient(to top, #f8fafb 0%, transparent 100%);
+  border-radius: 1rem;
 }
 
 .bar-item {
@@ -232,24 +201,25 @@
 }
 
 .bar-value {
-  font-size: 1rem;
-  font-weight: 700;
-  color: #1a4d4d;
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: #1e293b;
   margin-bottom: 0.75rem;
   background: white;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 2px solid #f1f5f9;
 }
 
 .bar-column {
   width: 100%;
   min-height: 30px;
-  border-radius: 0.75rem 0.75rem 0 0;
-  transition: all 0.3s ease;
+  border-radius: 1rem 1rem 0 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   position: relative;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .bar-column::before {
@@ -258,41 +228,39 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 40%;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), transparent);
-  border-radius: 0.75rem 0.75rem 0 0;
+  height: 50%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), transparent);
+  border-radius: 1rem 1rem 0 0;
 }
 
 .bar-column:hover {
-  transform: scaleY(1.05) translateY(-2px);
-  filter: brightness(1.1);
+  transform: scaleY(1.05) translateY(-4px);
+  filter: brightness(1.15);
+  box-shadow: 0 -6px 16px rgba(0, 0, 0, 0.15);
 }
 
 .bar-label {
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.875rem;
+  font-weight: 700;
   text-align: center;
-  color: #2c5454;
+  color: #475569;
   margin-top: 0.75rem;
   text-transform: capitalize;
   word-wrap: break-word;
   max-width: 100%;
-  background: white;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.5rem;
-  border: 1px solid #e8f5f5;
 }
 
 /* ========================================
-   PIE CHART STYLES - Vibrant Segments
+   PIE CHART
    ======================================== */
 
 .pie-chart-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4rem;
+  gap: 3rem;
   padding: 2rem;
+  flex-wrap: wrap;
 }
 
 .pie-chart {
@@ -300,12 +268,13 @@
   width: 280px;
   height: 280px;
   border-radius: 50%;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
   transition: transform 0.3s ease;
+  flex-shrink: 0;
 }
 
 .pie-chart:hover {
-  transform: scale(1.05);
+  transform: scale(1.08) rotate(5deg);
 }
 
 .pie-segment {
@@ -324,142 +293,86 @@
 }
 
 .pie-segment:hover {
-  filter: brightness(1.15);
+  filter: brightness(1.2);
 }
 
 .pie-legend {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  max-width: 280px;
+  max-width: 320px;
+  flex: 1;
+  min-width: 240px;
 }
 
 .legend-item {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  background: white;
-  border-radius: 0.5rem;
-  border: 2px solid #e8f5f5;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f8fafb;
+  border-radius: 0.75rem;
+  border: 2px solid transparent;
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
 .legend-item:hover {
+  background: white;
   border-color: #5eb8b8;
-  transform: translateX(4px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: translateX(8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .legend-color {
-  width: 1.25rem;
-  height: 1.25rem;
-  border-radius: 0.375rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 0.5rem;
   flex-shrink: 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .legend-text {
-  font-size: 0.875rem;
-  color: #1a4d4d;
+  font-size: 0.9rem;
+  color: #1e293b;
   font-weight: 600;
   text-transform: capitalize;
 }
 
 /* ========================================
-   LINE CHART STYLES - Gradient Line
-   ======================================== */
-
-.line-chart-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 1.5rem;
-}
-
-.line-chart-svg {
-  width: 100%;
-  max-width: 650px;
-  height: 280px;
-  border: 2px solid #e8f5f5;
-  border-radius: 1rem;
-  background: linear-gradient(to bottom, #ffffff, #f9fafa);
-  padding: 1rem;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.grid-line {
-  stroke: #e8f5f5;
-  stroke-width: 1;
-  stroke-dasharray: 4, 4;
-}
-
-.data-point {
-  cursor: pointer;
-  transition: all 0.2s ease;
-  filter: drop-shadow(0 2px 4px rgba(94, 184, 184, 0.3));
-}
-
-.data-point:hover {
-  r: 8;
-  fill: #ff6b9d;
-  filter: drop-shadow(0 0 8px rgba(255, 107, 157, 0.6));
-}
-
-.data-label {
-  font-size: 0.8rem;
-  fill: #1a4d4d;
-  font-weight: 700;
-}
-
-.timeline-labels {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 650px;
-  margin-top: 1rem;
-  padding: 0 1rem;
-}
-
-.timeline-label {
-  font-size: 0.75rem;
-  color: #64748b;
-  font-weight: 600;
-  text-align: center;
-  background: white;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.375rem;
-  border: 1px solid #e8f5f5;
-}
-
-/* ========================================
-   SUMMARY TABLE STYLES
+   SUMMARY TABLE
    ======================================== */
 
 .summary-section {
-  margin-top: 2rem;
+  background: white;
+  padding: 2.5rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 2px solid #f1f5f9;
 }
 
 .summary-title {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  color: #1a4d4d;
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid #e8f5f5;
+  color: #1e293b;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.title-icon {
+  font-size: 1.75rem;
 }
 
 .table-wrapper {
   overflow-x: auto;
   border-radius: 1rem;
-  border: 2px solid #e8f5f5;
-  background: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 2px solid #f1f5f9;
 }
 
 .summary-table {
-  min-width: 100%;
+  width: 100%;
   border-collapse: collapse;
 }
 
@@ -468,7 +381,7 @@
 }
 
 .summary-table th {
-  padding: 1rem;
+  padding: 1.25rem;
   text-align: left;
   font-size: 0.875rem;
   font-weight: 700;
@@ -478,13 +391,12 @@
 }
 
 .summary-table tbody tr {
-  border-bottom: 1px solid #e8f5f5;
+  border-bottom: 1px solid #f1f5f9;
   transition: all 0.2s ease;
 }
 
 .summary-table tbody tr:hover {
-  background: linear-gradient(90deg, #f0fafa, #ffffff);
-  transform: scale(1.01);
+  background: linear-gradient(90deg, #f8fafb, white);
 }
 
 .summary-table tbody tr:last-child {
@@ -492,29 +404,65 @@
 }
 
 .summary-table td {
-  padding: 1rem;
-  font-size: 0.875rem;
-  color: #2c5454;
+  padding: 1.25rem;
+  font-size: 0.9rem;
+  color: #475569;
   font-weight: 500;
 }
 
 .td-label {
-  text-transform: capitalize;
   font-weight: 700;
-  color: #1a4d4d;
+  color: #1e293b;
 }
 
-.color-box {
-  width: 2rem;
-  height: 1.25rem;
+.label-with-color {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-transform: capitalize;
+}
+
+.color-indicator {
+  width: 1rem;
+  height: 1rem;
   border-radius: 0.375rem;
-  border: 2px solid #e8f5f5;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-.color-box:hover {
-  transform: scale(1.2);
+.td-count {
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: #1e293b;
+}
+
+.td-percentage {
+  font-weight: 700;
+  color: #5eb8b8;
+}
+
+.severity-badge {
+  display: inline-block;
+  padding: 0.375rem 0.875rem;
+  border-radius: 2rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.severity-low {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.severity-medium {
+  background: #fed7aa;
+  color: #9a3412;
+}
+
+.severity-high {
+  background: #fecaca;
+  color: #991b1b;
 }
 
 /* ========================================
@@ -526,55 +474,91 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 3rem;
-  gap: 1rem;
+  padding: 5rem;
+  gap: 1.5rem;
 }
 
 .loading-spinner {
-  width: 3.5rem;
-  height: 3.5rem;
-  border: 4px solid #e8f5f5;
+  width: 4rem;
+  height: 4rem;
+  border: 5px solid #f1f5f9;
   border-top-color: #5eb8b8;
   border-right-color: #ff6b9d;
+  border-bottom-color: #9775fa;
   border-radius: 50%;
   animation: spin 1s ease-in-out infinite;
 }
 
 .loading-text {
-  font-size: 1.125rem;
-  color: #2c5454;
+  font-size: 1.25rem;
+  color: #475569;
   font-weight: 600;
 }
 
 .detection-chart-error {
-  padding: 2rem;
-  background: linear-gradient(135deg, #fee, #fdd);
-  border: 2px solid #fcc;
-  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  background: white;
+  border: 3px solid #fecaca;
+  border-radius: 1.5rem;
   text-align: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.error-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
 }
 
 .error-text {
-  color: #c33;
-  font-size: 1rem;
-  font-weight: 600;
+  color: #991b1b;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.error-hint {
+  color: #64748b;
+  font-size: 0.95rem;
 }
 
 .detection-chart-warning {
-  padding: 2rem;
-  background: linear-gradient(135deg, #fff8e1, #ffecb3);
-  border: 2px solid #ffe082;
-  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  background: white;
+  border: 3px solid #fed7aa;
+  border-radius: 1.5rem;
   text-align: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.warning-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
 }
 
 .warning-text {
-  color: #f57c00;
-  font-size: 1rem;
-  font-weight: 600;
+  color: #9a3412;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
 }
 
-/* Animations */
+.warning-hint {
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+
 @keyframes spin {
   from {
     transform: rotate(0deg);
@@ -588,18 +572,27 @@
    RESPONSIVE DESIGN
    ======================================== */
 
-/* Tablet (768px and below) */
+@media (max-width: 1024px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 768px) {
   .detection-chart-container {
-    padding: 1rem;
+    padding: 1.5rem;
   }
 
   .dashboard-title {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
   }
 
   .stats-grid {
     grid-template-columns: 1fr;
+  }
+
+  .chart-card {
+    padding: 1.5rem;
   }
 
   .pie-chart-wrapper {
@@ -608,8 +601,8 @@
   }
 
   .pie-chart {
-    width: 220px;
-    height: 220px;
+    width: 240px;
+    height: 240px;
   }
 
   .bar-chart-wrapper {
@@ -620,58 +613,38 @@
   .bar-item {
     max-width: 70px;
   }
-
-  .chart-display {
-    padding: 1.5rem;
-  }
 }
 
-/* Mobile (480px and below) */
 @media (max-width: 480px) {
   .detection-chart-container {
-    padding: 0.75rem;
+    padding: 1rem;
   }
 
   .dashboard-title {
-    font-size: 1.25rem;
-  }
-
-  .chart-button {
-    flex: 1;
-    min-width: calc(50% - 0.375rem);
-    justify-content: center;
-    padding: 0.75rem 0.5rem;
-  }
-
-  .button-label {
-    display: none;
-  }
-
-  .button-icon {
     font-size: 1.5rem;
   }
 
-  .chart-display {
-    padding: 1rem;
-    min-height: 350px;
+  .chart-card {
+    padding: 1.25rem;
   }
 
   .bar-chart-wrapper {
-    height: 220px;
-    gap: 0.5rem;
+    height: 240px;
+    gap: 0.75rem;
     padding: 1rem;
   }
 
   .bar-item {
-    max-width: 55px;
+    max-width: 60px;
   }
 
   .bar-value {
-    font-size: 0.8rem;
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
   }
 
   .bar-label {
-    font-size: 0.65rem;
+    font-size: 0.75rem;
   }
 
   .pie-chart {
@@ -679,33 +652,17 @@
     height: 200px;
   }
 
-  .pie-chart-wrapper {
-    padding: 1rem;
-    gap: 1.5rem;
-  }
-
   .summary-table th,
   .summary-table td {
-    padding: 0.625rem;
-    font-size: 0.75rem;
+    padding: 0.875rem;
+    font-size: 0.8rem;
+  }
+
+  .stat-icon {
+    font-size: 2rem;
   }
 
   .stat-value {
     font-size: 1.5rem;
-  }
-}
-
-/* Print Styles */
-@media print {
-  .chart-buttons {
-    display: none;
-  }
-
-  .detection-chart-container {
-    box-shadow: none;
-  }
-  
-  .stat-card {
-    break-inside: avoid;
   }
 }
