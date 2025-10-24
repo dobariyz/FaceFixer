@@ -128,7 +128,7 @@ const Dashboard = () => {
     <div className="dashboard-wrapper">
       <Navbar />
       
-      <div className="dashboard-container" style={{ backgroundImage: `url(${backgroundImage})` }}>
+      <div className="dashboard-container">
         <div className="dashboard-scroll-area">
           <div className="dashboard-content">
             <h2 className="dashboard-main-title">
