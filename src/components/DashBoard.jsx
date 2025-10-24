@@ -84,6 +84,36 @@ const Dashboard = () => {
     }
   };
 
+  // Delete history item function
+  const handleDeleteHistory = async (id) => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/detections/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete history");
+      }
+
+      // Update the history in session context by removing deleted item
+      const updatedHistory = history.filter(item => item.id !== id);
+      setSessionData({
+        ...sessionData,
+        history: updatedHistory,
+      });
+
+      alert("Detection history deleted successfully");
+    } catch (error) {
+      console.error("Error deleting history:", error);
+      alert("Error deleting history. Please try again.");
+    }
+  };
+
   //  Updated Logout to securely clear per-user session
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -149,8 +179,8 @@ const Dashboard = () => {
                   <p className="empty-history">No history found.</p>
                 ) : (
                   <div className="history-grid">
-                    {history.map((item, index) => (
-                      <div key={index} className="history-item">
+                    {history.map((item) => (
+                      <div key={item.id} className="history-item">
                         <p><strong>Uploaded:</strong></p>
                         <img
                           src={`http://localhost:5000/api/image?file=${item.imagePath}`}
@@ -164,6 +194,12 @@ const Dashboard = () => {
                           className="history-image"
                         />
                         <p><strong>Date:</strong> {new Date(item.createdAt).toLocaleString()}</p>
+                        <button 
+                          className="delete-history-btn"
+                          onClick={() => handleDeleteHistory(item.id)}
+                        >
+                          Delete
+                        </button>
                       </div>
                     ))}
                   </div>

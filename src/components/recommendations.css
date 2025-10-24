@@ -2,16 +2,36 @@
    RECOMMENDATIONS PAGE STYLES
    ======================================== */
 
-/* Container & Layout */
+/* Container & Layout - FIXED FOR FULL COVERAGE */
 .recommendations-container {
   min-height: 100vh;
+  width: 100%;
   background: linear-gradient(135deg, #a0d8d8 0%, #7ec8c8 50%, #5eb8b8 100%);
   padding: 3rem 1rem;
+  position: relative;
+  z-index: 1;
+  /* Ensure it covers any parent background */
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+/* Ensure body and root don't show through */
+.recommendations-container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #a0d8d8 0%, #7ec8c8 50%, #5eb8b8 100%);
+  z-index: -1;
 }
 
 .recommendations-wrapper {
   max-width: 1400px;
   margin: 0 auto;
+  position: relative;
+  z-index: 2;
 }
 
 /* Header Section */

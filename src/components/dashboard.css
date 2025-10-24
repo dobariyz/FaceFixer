@@ -289,6 +289,28 @@
   box-shadow: 0 2px 8px rgba(94, 184, 184, 0.3);
 }
 
+/* Add this to your existing dashboard.css file */
+
+.delete-history-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.delete-history-btn:hover {
+  background-color: #c82333;
+}
+
+.delete-history-btn:active {
+  transform: scale(0.98);
+}
 /* Upload Button */
 .dashboard-uploadImage {
   margin-top: 2rem;
