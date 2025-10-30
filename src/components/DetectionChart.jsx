@@ -232,7 +232,6 @@ const DetectionChart = () => {
     <div className="detection-chart-container">
       <div className="chart-header">
         <h2 className="dashboard-title">Your Skin Analysis Dashboard</h2>
-        <p className="dashboard-subtitle">Visual breakdown of detected skin concerns</p>
 
         {/* Stats Cards */}
         <div className="stats-grid">
