@@ -74,96 +74,115 @@ const Navbar = () => {
     setError("");
   };
 
-  // ✅ Create Sephora search URL with product name
   const getSephoraSearchUrl = (item) => {
     const brandName = item.brand || "";
     const productName = item.name || "";
     const searchTerm = encodeURIComponent(`${brandName} ${productName}`);
-    
-    // Canadian Sephora search URL
     return `https://www.sephora.com/ca/en/search?keyword=${searchTerm}`;
   };
 
   return (
     <>
       <nav className="navbar">
-        <div className="navbar-left">
-          <h2 className="company-name">FaceFixer</h2>
+        <div className="navbar-brand">
+          <h1 className="brand-logo">FaceFixer</h1>
         </div>
 
-        <div className="navbar-center">
-          <div className="search-bar">
+        <div className="navbar-search">
+          <div className="search-container">
             <input
               type="text"
+              className="search-input"
               placeholder="What are you looking for?"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             />
-            <button className="search-button" aria-label="Search" onClick={handleSearch}>
-              🔍
+            <button className="search-icon-btn" aria-label="Search" onClick={handleSearch}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+              </svg>
             </button>
           </div>
         </div>
 
-        <div className="navbar-right">
-          <span className="user-name">👤 {userName}</span>
-          <button className="logout-button" onClick={handleLogout}>
+        <div className="navbar-actions">
+          <div className="user-profile">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span className="user-name-text">{userName}</span>
+          </div>
+          <button className="btn-logout" onClick={handleLogout}>
             Log out
           </button>
         </div>
       </nav>
 
       {showResults && (
-        <div className="search-modal-overlay" onClick={closeResults}>
-          <div className="search-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-backdrop" onClick={closeResults}>
+          <div className="modal-panel" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2>Search Results for "{searchQuery}"</h2>
-              <button className="close-button" onClick={closeResults}>✕</button>
+              <h2 className="modal-title">Search Results</h2>
+              <button className="btn-close" onClick={closeResults}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
             </div>
 
-            <div className="modal-content">
+            <div className="modal-body">
               {loading && (
-                <div className="search-status">
-                  <div className="spinner"></div>
+                <div className="loading-state">
+                  <div className="loading-spinner"></div>
                   <p>Finding the best products for you...</p>
                 </div>
               )}
 
               {error && !loading && (
-                <div className="search-error">
-                  <span>⚠️</span>
+                <div className="error-state">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                  </svg>
                   <p>{error}</p>
                 </div>
               )}
 
               {!loading && !error && searchResults.length > 0 && (
-                <div className="search-results-grid">
+                <div className="products-grid">
                   {searchResults.map((item, index) => (
                     <div key={index} className="product-card">
-                      <div className="product-image">
+                      <div className="product-img-wrapper">
                         {item.image ? (
-                          <img src={item.image} alt={item.name} />
+                          <img src={item.image} alt={item.name} className="product-img" />
                         ) : (
-                          <div className="no-image">No Image</div>
+                          <div className="product-img-placeholder">No Image</div>
                         )}
                       </div>
-                      <div className="product-info">
+                      <div className="product-details">
                         <p className="product-brand">{item.brand}</p>
-                        <h3 className="product-name">{item.name}</h3>
-                        <div className="product-footer">
+                        <h3 className="product-title">{item.name}</h3>
+                        <div className="product-meta">
                           <span className="product-price">{item.price}</span>
                           {item.rating && (
-                            <span className="product-rating">⭐ {item.rating}</span>
+                            <span className="product-rating">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="#f59e0b">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                              </svg>
+                              {item.rating}
+                            </span>
                           )}
                         </div>
-                        
-                        {/* ✅ Clean single button that opens Sephora search */}
                         <a 
                           href={getSephoraSearchUrl(item)}
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="view-product-btn"
+                          className="btn-view-product"
                         >
                           View on Sephora
                         </a>
