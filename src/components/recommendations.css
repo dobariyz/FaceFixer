@@ -168,7 +168,7 @@
   gap: 1.5rem;
 }
 
-/* Product Card - Enhanced Glassy Effect */
+/* Product Card - JAW-DROPPING Enhanced Glassy Effect */
 .product-card {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 1rem;
@@ -176,12 +176,13 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: all 0.3s ease;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   border: 2px solid rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(10px);
 }
 
+/* Animated gradient border on hover */
 .product-card::before {
   content: '';
   position: absolute;
@@ -189,30 +190,81 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #5eb8b8, #7ec8c8);
+  background: linear-gradient(90deg, #5eb8b8, #7ec8c8, #5eb8b8);
+  background-size: 200% 100%;
   transform: scaleX(0);
-  transition: transform 0.3s ease;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: shimmer 3s linear infinite;
+}
+
+/* Glowing overlay effect */
+.product-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(94, 184, 184, 0.1) 50%,
+    transparent 100%
+  );
+  transition: right 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .product-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 24px rgba(94, 184, 184, 0.3);
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 
+    0 20px 40px rgba(94, 184, 184, 0.4),
+    0 0 60px rgba(94, 184, 184, 0.2),
+    inset 0 0 20px rgba(255, 255, 255, 0.3);
   border-color: #5eb8b8;
+  background: rgba(255, 255, 255, 0.98);
 }
 
 .product-card:hover::before {
   transform: scaleX(1);
 }
 
+.product-card:hover::after {
+  right: 100%;
+}
+
 .product-image-wrapper {
   position: relative;
   width: 100%;
   height: 16rem;
-  background-color: #f5fafa;
+  background: linear-gradient(135deg, #f5fafa 0%, #e8f5f5 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+}
+
+/* Animated background sweep on hover */
+.product-image-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(94, 184, 184, 0.15) 50%,
+    transparent 100%
+  );
+  transition: left 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+}
+
+.product-card:hover .product-image-wrapper::before {
+  left: 100%;
 }
 
 .product-image {
@@ -220,11 +272,34 @@
   height: 100%;
   object-fit: contain;
   padding: 1rem;
-  transition: transform 0.3s ease;
+  position: relative;
+  z-index: 2;
+  filter: brightness(1) contrast(1);
+  /* Default state - image is visible and centered */
+  transform: translateX(0) scale(1);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* On hover: image slides IN from right side (starts outside, moves to center) */
 .product-card:hover .product-image {
-  transform: scale(1.05);
+  animation: slideInFromRight 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* When hover ends: image slides back to normal position smoothly */
+.product-card .product-image {
+  animation: none;
+}
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(100%) scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0) scale(1.1);
+    opacity: 1;
+    filter: brightness(1.1) contrast(1.05);
+  }
 }
 
 .product-content {
@@ -232,6 +307,8 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+  position: relative;
+  z-index: 2;
 }
 
 .product-brand {
@@ -241,6 +318,14 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 0.25rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: left;
+}
+
+.product-card:hover .product-brand {
+  color: #3d8080;
+  letter-spacing: 0.1em;
+  transform: translateX(4px);
 }
 
 .product-name {
@@ -254,6 +339,12 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   line-height: 1.4;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-card:hover .product-name {
+  color: #1a3333;
+  transform: translateX(2px);
 }
 
 /* Product Footer */
@@ -263,12 +354,22 @@
   justify-content: space-between;
   margin-top: auto;
   gap: 0.75rem;
+  position: relative;
+  z-index: 2;
 }
 
 .product-price {
   font-size: 1.125rem;
   font-weight: 700;
   color: #2c5454;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.product-card:hover .product-price {
+  color: #5eb8b8;
+  transform: scale(1.1);
+  text-shadow: 0 2px 10px rgba(94, 184, 184, 0.3);
 }
 
 .product-button {
@@ -276,33 +377,59 @@
   align-items: center;
   gap: 0.25rem;
   padding: 0.5rem 1rem;
-  background-color: #5eb8b8;
+  background: linear-gradient(135deg, #5eb8b8 0%, #4a9999 100%);
   color: white;
   font-size: 0.875rem;
   font-weight: 600;
   border-radius: 0.5rem;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
   text-transform: uppercase;
   letter-spacing: 0.025em;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(94, 184, 184, 0.3);
+}
+
+/* Sliding shine effect on button */
+.product-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-button:hover::before {
+  left: 100%;
 }
 
 .product-button:hover {
-  background-color: #4a9999;
-  transform: translateX(2px);
-  box-shadow: 0 4px 8px rgba(94, 184, 184, 0.3);
+  background: linear-gradient(135deg, #4a9999 0%, #3d8080 100%);
+  transform: translateX(4px);
+  box-shadow: 
+    0 6px 20px rgba(94, 184, 184, 0.5),
+    0 0 30px rgba(94, 184, 184, 0.3);
 }
 
 .button-icon {
   width: 0.75rem;
   height: 0.75rem;
   flex-shrink: 0;
-  transition: transform 0.2s ease;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .product-button:hover .button-icon {
-  transform: translate(2px, -2px);
+  transform: translate(4px, -4px) rotate(5deg);
 }
 
 /* Animations */
@@ -312,6 +439,15 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
   }
 }
 

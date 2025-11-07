@@ -1,9 +1,8 @@
 import "./dashboard.css";  
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { SessionContext } from "./SessionContext";
-import { useRef } from "react";
 import Navbar from "./Navbar"; 
 import Footer from "./Footer";
 
@@ -11,10 +10,13 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
+  const [showCamera, setShowCamera] = useState(false);
+  const [stream, setStream] = useState(null);
   const { sessionData, setSessionData, clearSession } = useContext(SessionContext);
   const { selectedFile, processedImage, history } = sessionData;
   const historyRef = useRef(null);
-
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -34,10 +36,9 @@ const Dashboard = () => {
           history: data,
         });
 
-        // 👇 Scroll to history section after loading
-      setTimeout(() => {
-        historyRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 300);
+        setTimeout(() => {
+          historyRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 300);
 
       } catch (error) {
         console.error("Error fetching history:", error);
@@ -46,6 +47,79 @@ const Dashboard = () => {
 
     fetchHistory();
   }, [showHistory]);
+
+  // Start camera
+const startCamera = async () => {
+  try {
+    const mediaStream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: "user",
+        width: { ideal: 1280 },
+        height: { ideal: 720 },
+      },
+      audio: false, // just to be safe
+    });
+
+    setStream(mediaStream);
+    setShowCamera(true);
+
+    // Wait a moment for the video element to mount before assigning stream
+    setTimeout(async () => {
+      if (videoRef.current) {
+        videoRef.current.srcObject = mediaStream;
+        try {
+          await videoRef.current.play();
+        } catch (err) {
+          console.error("Video playback failed:", err);
+        }
+      }
+    }, 200);
+  } catch (error) {
+    console.error("Error accessing camera:", error);
+    alert("Unable to access camera. Please check permissions or try another browser.");
+  }
+};
+
+
+  // Stop camera
+  const stopCamera = () => {
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop());
+      setStream(null);
+    }
+    setShowCamera(false);
+  };
+
+  // Capture photo
+  const capturePhoto = () => {
+    if (videoRef.current && canvasRef.current) {
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0);
+      
+      canvas.toBlob((blob) => {
+        const file = new File([blob], "camera-capture.jpg", { type: "image/jpeg" });
+        setSessionData({ ...sessionData, selectedFile: file });
+        stopCamera();
+      }, 'image/jpeg', 0.95);
+    }
+  };
+
+  // Clean up camera on unmount
+ useEffect(() => {
+  return () => {
+    if (videoRef.current && videoRef.current.srcObject) {
+      videoRef.current.srcObject.getTracks().forEach(track => track.stop());
+      videoRef.current.srcObject = null;
+    }
+  };
+}, []);
+
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -131,6 +205,56 @@ const Dashboard = () => {
     <div className="dashboard-wrapper">
       <Navbar />
       
+      {/* Camera Modal */}
+      {showCamera && (
+        <div className="camera-modal-overlay" onClick={stopCamera}>
+          <div className="camera-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="camera-header">
+              <h3 className="camera-title">Take a Photo</h3>
+              <button className="camera-close" onClick={stopCamera}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+            
+            <div className="camera-body">
+              <video 
+                ref={videoRef} 
+                autoPlay 
+                playsInline
+                muted
+                style={{ width: '100%', height: 'auto', objectFit: 'cover'}}
+                className="camera-video"
+              />
+              <div className="camera-overlay">
+                <div className="camera-guide"></div>
+                <div className  ="camera-instructions">
+                    <h4>Position your face inside the oval</h4>
+                    <p>Ensure good lighting and remove glasses for best accuracy.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="camera-footer">
+              <button className="camera-btn-cancel" onClick={stopCamera}>
+                Cancel
+              </button>
+              <button className="camera-btn-capture" onClick={capturePhoto}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                  <circle cx="12" cy="13" r="4"></circle>
+                </svg>
+                Capture Photo
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <canvas ref={canvasRef} style={{ display: 'none' }} />
+      
       <div className="dashboard-container">
         <div className="dashboard-main">
           {/* Hero Section */}
@@ -186,6 +310,14 @@ const Dashboard = () => {
                     </svg>
                     Choose File
                   </label>
+                  
+                  <button className="camera-input-button" onClick={startCamera}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                      <circle cx="12" cy="13" r="4"></circle>
+                    </svg>
+                    Take Photo
+                  </button>
                 </div>
               </div>
 

@@ -21,48 +21,56 @@ const Signup = () => {
     });
   };
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
+  // Replace your handleSignup function in Signup.jsx with this:
 
-    if (userData.password !== userData.confirmPassword) {
-      alert("Passwords do not match!");
-      
-    }
-    if (!userData.firstName || !userData.lastName || !userData.email || !userData.password) {
-      alert("All fields are required!");
-      return;
-    }
+const handleSignup = async (e) => {
+  e.preventDefault();
 
-    const requestData = {
-      firstName: userData.firstName.trim(),
-      lastName: userData.lastName.trim(),
-      email: userData.email.trim(),
-      password: userData.password.trim(),
-    };
+  if (userData.password !== userData.confirmPassword) {
+    alert("Passwords do not match!");
+    return;
+  }
+  
+  if (!userData.firstName || !userData.lastName || !userData.email || !userData.password) {
+    alert("All fields are required!");
+    return;
+  }
 
-    console.log("Sending data:", requestData);  // Debugging statement
-
-
-    try {
-      const response = await axios.post("http://localhost:5000/auth/signupUser", requestData, {
-        headers: { 'Content-Type': 'application/json' }
-      });
-      
-    
-      console.log(response.data); // Handle the response, e.g., success message or token
-
-      navigate("/"); // Redirect to dashboard after successful signup
-    } catch (error) {
-      console.error("Error during signup:", error);
-      if (error.response && error.response.status === 400) {
-        alert(error.response.data.message);
-    }
-     else {
-        alert("An unexpected error occurred. Please try again.");
-      }
-    }
-
+  const requestData = {
+    firstName: userData.firstName.trim(),
+    lastName: userData.lastName.trim(),
+    email: userData.email.trim(),
+    password: userData.password.trim(),
   };
+
+  console.log("Sending data:", requestData);
+
+  try {
+    const response = await axios.post("http://localhost:5000/auth/signupUser", requestData, {
+      headers: { 'Content-Type': 'application/json' }
+    });
+    
+    console.log(response.data);
+
+    if (response.data && response.data.token) {
+      // Store the token
+      localStorage.setItem('token', response.data.token);
+      
+      // After signup, always redirect to terms page
+      // (new users haven't accepted terms yet)
+      navigate("/terms");
+    } else {
+      navigate("/");
+    }
+  } catch (error) {
+    console.error("Error during signup:", error);
+    if (error.response && error.response.status === 400) {
+      alert(error.response.data.message);
+    } else {
+      alert("An unexpected error occurred. Please try again.");
+    }
+  }
+};
 
   return (
     <div className="signup-container">

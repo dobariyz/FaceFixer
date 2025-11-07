@@ -7,26 +7,48 @@ import "./index.css";
 const Login = () => {
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  // Replace your handleLogin function in Login.jsx with this:
+
+const handleLogin = async (e) => {
+  e.preventDefault();
+  
+  const email = e.target[0].value;
+  const password = e.target[1].value;
+  
+  try {
+    const response = await axios.post('http://localhost:5000/auth/loginUser', { email, password });
     
-    const email = e.target[0].value;
-    const password = e.target[1].value;
-    
-    try {
-      const response = await axios.post('http://localhost:5000/auth/loginUser', { email, password });
+    if (response.status === 200 && response.data.token) {
+      // Store the token
+      localStorage.setItem('token', response.data.token);
       
-      if (response.status === 200 && response.data.token) {
-        localStorage.setItem('token', response.data.token);
-        navigate("/dashboard");
-      } else {
-        throw new Error("Invalid response from server");
+      // Check if user has accepted terms
+      try {
+        const termsResponse = await axios.get('http://localhost:5000/auth/check-terms', {
+          headers: {
+            'Authorization': `Bearer ${response.data.token}`
+          }
+        });
+
+        // Redirect based on terms acceptance
+        if (termsResponse.data && termsResponse.data.termsAccepted) {
+          navigate('/dashboard');
+        } else {
+          navigate('/terms');
+        }
+      } catch (termsError) {
+        console.error('Error checking terms:', termsError);
+        // Default to terms page if check fails for safety
+        navigate('/terms');
       }
-    } catch (error) {
-      console.error('Login failed:', error.response?.data?.message || error.message);
-      alert(error.response?.data?.message || "Login failed! Please check your credentials.");
+    } else {
+      throw new Error("Invalid response from server");
     }
-  };
+  } catch (error) {
+    console.error('Login failed:', error.response?.data?.message || error.message);
+    alert(error.response?.data?.message || "Login failed! Please check your credentials.");
+  }
+};
 
   return (
     <div className="login-wrapper">
