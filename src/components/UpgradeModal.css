@@ -1,0 +1,414 @@
+/* Upgrade Modal - Jaw-Dropping Design Matching Dashboard */
+
+/* Overlay */
+.upgrade-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Modal Container */
+.upgrade-modal {
+  background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.8);
+  border: 1px solid rgba(255,255,255,0.5);
+  position: relative;
+  animation: slideUp 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Custom Scrollbar */
+.upgrade-modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.upgrade-modal::-webkit-scrollbar-track {
+  background: rgba(94,184,184,0.08);
+  border-radius: 4px;
+}
+
+.upgrade-modal::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(94,184,184,0.5), rgba(74,153,153,0.7));
+  border-radius: 4px;
+}
+
+/* Close Button */
+.upgrade-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(0,0,0,0.05);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.upgrade-modal-close:hover {
+  background: rgba(0,0,0,0.1);
+  transform: rotate(90deg);
+}
+
+.upgrade-modal-close svg {
+  color: #666;
+}
+
+/* Header */
+.upgrade-modal-header {
+  text-align: center;
+  padding: 50px 40px 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+.upgrade-modal-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(94,184,184,0.08), transparent 70%);
+  filter: blur(40px);
+  z-index: 0;
+}
+
+.upgrade-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  background: linear-gradient(135deg, #5eb8b8, #4a9999);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 40px rgba(94,184,184,0.3);
+  position: relative;
+  z-index: 1;
+  animation: iconFloat 3s ease-in-out infinite;
+}
+
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.upgrade-icon svg {
+  color: white;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2));
+}
+
+.upgrade-modal-title {
+  font-size: clamp(28px, 4vw, 36px);
+  font-weight: 800;
+  color: #133;
+  margin: 0 0 12px 0;
+  letter-spacing: -0.5px;
+  position: relative;
+  z-index: 1;
+}
+
+.upgrade-modal-subtitle {
+  font-size: clamp(14px, 2vw, 16px);
+  color: #666;
+  margin: 0;
+  line-height: 1.6;
+  position: relative;
+  z-index: 1;
+}
+
+/* Pricing Grid */
+.upgrade-pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  padding: 0 40px 40px;
+}
+
+/* Pricing Card */
+.upgrade-pricing-card {
+  background: white;
+  border-radius: 20px;
+  padding: 32px 24px;
+  border: 2px solid #e0e0e0;
+  position: relative;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.upgrade-pricing-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(94,184,184,0.03), rgba(74,153,153,0.01));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.upgrade-pricing-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 60px rgba(94,184,184,0.15);
+  border-color: #5eb8b8;
+}
+
+.upgrade-pricing-card:hover::before {
+  opacity: 1;
+}
+
+/* Premium Card Styling */
+.upgrade-pricing-premium {
+  border-color: #5eb8b8;
+  box-shadow: 0 12px 40px rgba(94,184,184,0.12);
+}
+
+/* Pro Card Styling */
+.upgrade-pricing-pro {
+  border-color: #ffd700;
+  box-shadow: 0 12px 40px rgba(255,215,0,0.12);
+}
+
+/* Badge */
+.upgrade-pricing-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: linear-gradient(135deg, #5eb8b8, #4a9999);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(94,184,184,0.3);
+}
+
+.upgrade-pricing-badge-pro {
+  background: linear-gradient(135deg, #ffd700, #ffb700);
+  box-shadow: 0 4px 12px rgba(255,215,0,0.3);
+}
+
+/* Title */
+.upgrade-pricing-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #133;
+  margin: 0 0 16px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Price */
+.upgrade-pricing-price {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 24px;
+}
+
+.upgrade-pricing-currency {
+  font-size: 24px;
+  font-weight: 700;
+  color: #5eb8b8;
+  margin-right: 4px;
+}
+
+.upgrade-pricing-amount {
+  font-size: 48px;
+  font-weight: 900;
+  color: #133;
+  line-height: 1;
+}
+
+.upgrade-pricing-period {
+  font-size: 16px;
+  color: #999;
+  margin-left: 4px;
+}
+
+/* Features List */
+.upgrade-pricing-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px 0;
+}
+
+.upgrade-pricing-features li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  color: #444;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.upgrade-pricing-features li svg {
+  color: #4ade80;
+  flex-shrink: 0;
+}
+
+.upgrade-pricing-features li strong {
+  color: #133;
+  font-weight: 700;
+}
+
+/* Button */
+.upgrade-pricing-btn {
+  width: 100%;
+  padding: 16px 24px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.upgrade-pricing-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s;
+}
+
+.upgrade-pricing-btn:hover:not(:disabled)::before {
+  transform: translateX(100%);
+}
+
+.upgrade-pricing-btn-premium {
+  background: linear-gradient(135deg, #5eb8b8, #4a9999);
+  color: white;
+  box-shadow: 0 8px 28px rgba(94,184,184,0.3);
+}
+
+.upgrade-pricing-btn-premium:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(94,184,184,0.4);
+}
+
+.upgrade-pricing-btn-pro {
+  background: linear-gradient(135deg, #ffd700, #ffb700);
+  color: #333;
+  box-shadow: 0 8px 28px rgba(255,215,0,0.3);
+}
+
+.upgrade-pricing-btn-pro:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(255,215,0,0.4);
+}
+
+.upgrade-pricing-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Spinner */
+.upgrade-spinner {
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Footer */
+.upgrade-modal-footer {
+  padding: 0 40px 40px;
+  text-align: center;
+}
+
+.upgrade-modal-guarantee {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #777;
+  margin: 0;
+}
+
+.upgrade-modal-guarantee svg {
+  color: #4ade80;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .upgrade-modal {
+    margin: 10px;
+    border-radius: 20px;
+  }
+
+  .upgrade-modal-header {
+    padding: 40px 24px 24px;
+  }
+
+  .upgrade-pricing-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0 24px 24px;
+  }
+
+  .upgrade-modal-footer {
+    padding: 0 24px 24px;
+  }
+
+  .upgrade-pricing-amount {
+    font-size: 40px;
+  }
+
+  .upgrade-modal-title {
+    font-size: 26px;
+  }
+}

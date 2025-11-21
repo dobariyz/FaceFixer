@@ -8,6 +8,7 @@ import ProtectedRoutes from './components/ProtectedRoutes';
 import Recommendations from './components/Recommendations';
 import TermsAndConditions from './components/TermsAndConditions';
 import { SessionProvider } from './components/SessionContext';
+import PaymentSuccess from './components/PaymentSuccess';
 
 const App = () => {
   return (
@@ -56,6 +57,18 @@ const App = () => {
               </ProtectedRoutes>
             } 
           />
+          <Route path="/payment/success" element={<PaymentSuccess />} />
+            <Route path="/payment/cancel" element={
+              <div className="payment-result-container">
+                <div className="payment-result-card">
+                  <h1>Payment Cancelled</h1>
+                  <p>You can upgrade anytime from your dashboard.</p>
+                  <button onClick={() => navigate('/dashboard')}>
+                    Return to Dashboard
+                  </button>
+                </div>
+              </div>
+            } />
           
           {/* Fallback route - redirect to login */}
           <Route path="*" element={<Login />} />

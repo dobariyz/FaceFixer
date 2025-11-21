@@ -3,10 +3,23 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { SessionContext } from "./SessionContext";
+import WarningBanner from "./WarningBanner";
+import UpgradeModal from "./UpgradeModal";
+import UsageCounter from "./UsageCounter";
+
 import Navbar from "./Navbar"; 
 import Footer from "./Footer";
 
 const Dashboard = () => {
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const tokenFromUrl = urlParams.get("token");
+
+  if (tokenFromUrl) {
+    localStorage.setItem("token", tokenFromUrl);
+    window.history.replaceState({}, document.title, "/dashboard");
+  }
+
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
@@ -14,9 +27,41 @@ const Dashboard = () => {
   const [stream, setStream] = useState(null);
   const { sessionData, setSessionData, clearSession } = useContext(SessionContext);
   const { selectedFile, processedImage, history } = sessionData;
+  const [subscription, setSubscription] = useState(null);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [showWarningBanner, setShowWarningBanner] = useState(true);
+  const [subscriptionLoading, setSubscriptionLoading] = useState(true);
+
   const historyRef = useRef(null);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+
+ useEffect(() => {
+    fetchSubscriptionStatus();
+  }, []);
+
+  const fetchSubscriptionStatus = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:5000/api/subscription/status', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setSubscription(data);
+        console.log('✅ Subscription loaded:', data);
+      } else {
+        console.error('Failed to fetch subscription');
+      }
+    } catch (error) {
+      console.error('Error fetching subscription:', error);
+    } finally {
+      setSubscriptionLoading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -80,7 +125,6 @@ const startCamera = async () => {
   }
 };
 
-
   // Stop camera
   const stopCamera = () => {
     if (stream) {
@@ -120,25 +164,40 @@ const startCamera = async () => {
   };
 }, []);
 
-
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setSessionData({ ...sessionData, selectedFile: file });
   };
 
   const handleUpload = async () => {
-    if (!selectedFile) {
-      alert("Please select an image.");
+  const token = localStorage.getItem("token");
+
+  if (!subscription) {
+      alert('Unable to check subscription status. Please refresh the page.');
       return;
     }
 
-    const formData = new FormData();
-    formData.append("file", selectedFile);
+    if (!subscription.canUpload) {
+      setShowUpgradeModal(true);
+      return;
+    }
 
-    setIsProcessing(true);
-    const token = localStorage.getItem('token');
+  if (!selectedFile) {
+    alert("Please select an image.");
+    return;
+  }
 
-    try {
+  if (!token) {
+    alert("Authentication token missing. Please log in again.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("file", selectedFile);
+
+  setIsProcessing(true);
+
+  try {
       const response = await fetch("http://localhost:5000/api/detect", {
         method: "POST",
         body: formData,
@@ -147,14 +206,35 @@ const startCamera = async () => {
         },
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to upload image");
-      }
       const data = await response.json();
-      setSessionData({
-        ...sessionData,
-        processedImage: `http://localhost:5000${data.processed}`,
-      });
+
+      if (response.ok) {
+        setSessionData({
+          ...sessionData,
+          processedImage: `http://localhost:5000${data.processed}`,
+        });
+
+        // ✅ Update subscription data from response
+        if (data.uploadsUsed !== undefined) {
+          setSubscription(prev => ({
+            ...prev,
+            uploadsUsed: data.uploadsUsed,
+            uploadsRemaining: data.uploadsRemaining,
+            canUpload: data.uploadsUsed < data.uploadsLimit
+          }));
+        }
+
+        // ✅ Refresh subscription status
+        fetchSubscriptionStatus();
+
+      } else if (response.status === 403 && data.error === 'limit_reached') {
+        // ✅ Limit reached - show upgrade modal
+        alert(data.message);
+        setShowUpgradeModal(true);
+        fetchSubscriptionStatus(); // Refresh to show updated limit
+      } else {
+        throw new Error(data.error || "Failed to upload image");
+      }
 
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -162,7 +242,7 @@ const startCamera = async () => {
     } finally {
       setIsProcessing(false);
     }
-  };
+};
 
   const handleDeleteHistory = async (id) => {
     const token = localStorage.getItem("token");
@@ -200,6 +280,10 @@ const startCamera = async () => {
     navigate("/login");
     window.location.reload();
   };
+
+  // Calculate if we should show warning banner
+  const shouldShowWarning = subscription && subscription.uploadsRemaining <= 1 && subscription.tier === 'free';
+
 
   return (
     <div className="dashboard-wrapper">
@@ -268,6 +352,15 @@ const startCamera = async () => {
               Discover underlying issues to provide targeted, customized treatment plans.
             </p>
           </section>
+
+           {/* ✅ Warning Banner (shows after 4th upload) */}
+          {shouldShowWarning && showWarningBanner && (
+            <WarningBanner
+              uploadsRemaining={subscription.uploadsRemaining}
+              onUpgradeClick={() => setShowUpgradeModal(true)}
+              onDismiss={() => setShowWarningBanner(false)}
+            />
+          )}
 
           {/* Upload Section */}
           <section className="upload-section">
@@ -355,9 +448,11 @@ const startCamera = async () => {
             <button 
               className="btn-detect" 
               onClick={handleUpload} 
-              disabled={isProcessing || !selectedFile}
+              disabled={isProcessing || !selectedFile || (subscription && !subscription.canUpload)}
             >
-              {isProcessing ? 'Processing...' : "Get Started"}
+              {isProcessing ? 'Processing...' : 
+               subscription && !subscription.canUpload ? 'Upgrade Required' : 
+               "Get Started"}
             </button>
           </section>
 
@@ -488,6 +583,15 @@ const startCamera = async () => {
 
         {/* Sidebar */}
         <aside className="dashboard-sidebar">
+          {/* ✅ Usage Counter */}
+          {!subscriptionLoading && subscription && (
+            <UsageCounter
+              uploadsUsed={subscription.uploadsUsed}
+              uploadsLimit={subscription.uploadsLimit}
+              tier={subscription.tier}
+              onUpgradeClick={() => setShowUpgradeModal(true)}
+            />
+          )}
           <h3 className="sidebar-title">Quick Actions</h3>
           
           <div className="sidebar-actions">
@@ -538,6 +642,16 @@ const startCamera = async () => {
       </div>
 
       <Footer />
+      {/* ✅ Upgrade Modal */}
+      {showUpgradeModal && subscription && (
+        <UpgradeModal
+          isOpen={showUpgradeModal}
+          onClose={() => setShowUpgradeModal(false)}
+          currentTier={subscription.tier}
+          uploadsUsed={subscription.uploadsUsed}
+          uploadsLimit={subscription.uploadsLimit}
+        />
+      )}
     </div>
   );
 };

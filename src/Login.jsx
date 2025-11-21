@@ -7,8 +7,6 @@ import "./index.css";
 const Login = () => {
   const navigate = useNavigate();
 
-  // Replace your handleLogin function in Login.jsx with this:
-
 const handleLogin = async (e) => {
   e.preventDefault();
   
