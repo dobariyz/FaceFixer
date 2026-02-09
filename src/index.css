@@ -11,8 +11,9 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: #5F41E4;
+  background: url("assets/loginBackground.jpg") no-repeat center center/cover;
 }
+
 #root {
   width: 100%;
   padding: 0.6rem;

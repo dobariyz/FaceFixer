@@ -1,0 +1,415 @@
+/* Terms & Conditions - Matching Dashboard Design System */
+
+/* Container with animated gradient background matching dashboard */
+.terms-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: radial-gradient(1200px 700px at 10% 10%, rgba(0,215,255,0.06), transparent 10%),
+              radial-gradient(1000px 600px at 90% 90%, rgba(0,255,170,0.03), transparent 12%),
+              url('/src/assets/loginBackground.jpg') center/cover fixed no-repeat;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Floating orb effect behind card */
+.terms-container::before {
+  content: "";
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  right: -200px;
+  top: -100px;
+  background: radial-gradient(circle at 30% 30%, rgba(94,184,184,0.12), rgba(74,153,153,0.06) 40%, transparent 60%);
+  filter: blur(80px);
+  z-index: 0;
+  pointer-events: none;
+  animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-30px) rotate(5deg); }
+}
+
+/* Main card with glassmorphism */
+.terms-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.75));
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 20px;
+  box-shadow: 0 28px 80px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.6);
+  max-width: 900px;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.32);
+  position: relative;
+  z-index: 1;
+  animation: cardSlideIn 700ms cubic-bezier(.2,.9,.3,1);
+}
+
+@keyframes cardSlideIn {
+  from { transform: translateY(30px) scale(.96); opacity: 0; filter: blur(8px); }
+  to { transform: translateY(0) scale(1); opacity: 1; filter: blur(0); }
+}
+
+/* Header with dashboard gradient colors */
+.terms-header {
+  background: linear-gradient(135deg, #5eb8b8, #4a9999);
+  color: white;
+  padding: 40px 30px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.terms-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="M100 0 L0 0 0 100" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></svg>') center/contain repeat;
+  opacity: .4;
+  mix-blend-mode: overlay;
+}
+
+.terms-header h1 {
+  margin: 0 0 12px 0;
+  font-size: clamp(24px, 4vw, 32px);
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  position: relative;
+  z-index: 1;
+}
+
+.terms-subtitle {
+  margin: 0;
+  font-size: clamp(13px, 2vw, 15px);
+  opacity: 0.95;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Content area */
+.terms-content {
+  padding: 35px 40px;
+}
+
+/* Scrollable terms area with custom scrollbar matching dashboard */
+.terms-scroll {
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 20px;
+  margin-bottom: 25px;
+}
+
+.terms-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.terms-scroll::-webkit-scrollbar-track {
+  background: rgba(94,184,184,0.08);
+  border-radius: 4px;
+}
+
+.terms-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(94,184,184,0.5), rgba(74,153,153,0.7));
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+.terms-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(94,184,184,0.7), rgba(74,153,153,0.9));
+}
+
+/* Typography in terms */
+.terms-scroll h2 {
+  color: #133;
+  font-size: 19px;
+  margin-top: 24px;
+  margin-bottom: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  position: relative;
+  padding-left: 16px;
+}
+
+.terms-scroll h2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 20px;
+  background: linear-gradient(180deg, #5eb8b8, #4a9999);
+  border-radius: 2px;
+}
+
+.terms-scroll h2:first-child {
+  margin-top: 0;
+}
+
+.terms-scroll p {
+  color: #444;
+  line-height: 1.8;
+  margin-bottom: 16px;
+  font-size: 15px;
+}
+
+.terms-scroll ul {
+  margin-left: 20px;
+  margin-bottom: 18px;
+}
+
+.terms-scroll ul li {
+  color: #555;
+  line-height: 1.9;
+  margin-bottom: 10px;
+  font-size: 15px;
+  position: relative;
+  padding-left: 8px;
+}
+
+.terms-scroll ul li::marker {
+  color: #5eb8b8;
+  font-weight: 700;
+}
+
+.terms-effective-date {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 2px solid rgba(94,184,184,0.15);
+  color: #777;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Error message with modern styling */
+.terms-error {
+  background: linear-gradient(135deg, rgba(239,68,68,0.08), rgba(220,38,38,0.06));
+  color: #dc2626;
+  padding: 14px 18px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  text-align: center;
+  font-weight: 600;
+  border: 1px solid rgba(220,38,38,0.15);
+  animation: errorShake 400ms ease-in-out;
+}
+
+@keyframes errorShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+/* Checkbox container with glass effect */
+.terms-checkbox-container {
+  background: linear-gradient(135deg, rgba(94,184,184,0.06), rgba(74,153,153,0.04));
+  backdrop-filter: blur(10px);
+  padding: 22px 24px;
+  border-radius: 12px;
+  margin: 0 40px 24px 40px;
+  border: 1px solid rgba(94,184,184,0.12);
+  transition: all 0.3s ease;
+}
+
+.terms-checkbox-container:hover {
+  background: linear-gradient(135deg, rgba(94,184,184,0.08), rgba(74,153,153,0.06));
+  border-color: rgba(94,184,184,0.2);
+}
+
+.terms-checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.terms-checkbox {
+  width: 22px;
+  height: 22px;
+  margin-right: 14px;
+  cursor: pointer;
+  accent-color: #5eb8b8;
+  transition: transform 0.2s;
+}
+
+.terms-checkbox:hover {
+  transform: scale(1.1);
+}
+
+.terms-checkbox-label span {
+  color: #133;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+/* Action buttons matching dashboard style */
+.terms-actions {
+  display: flex;
+  gap: 16px;
+  padding: 0 40px 35px 40px;
+}
+
+.terms-btn {
+  flex: 1;
+  padding: 15px 28px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Secondary button (Logout) */
+.terms-btn-secondary {
+  background: linear-gradient(180deg, rgba(240,240,240,0.9), rgba(230,230,230,0.8));
+  color: #555;
+  border: 2px solid rgba(0,0,0,0.08);
+}
+
+.terms-btn-secondary:hover {
+  background: linear-gradient(180deg, rgba(230,230,230,0.9), rgba(220,220,220,0.8));
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+/* Primary button (Accept) matching dashboard gradient */
+.terms-btn-primary {
+  background: linear-gradient(135deg, #5eb8b8, #4a9999);
+  color: white;
+  box-shadow: 0 12px 32px rgba(94,184,184,0.28);
+  border: 2px solid rgba(255,255,255,0.2);
+}
+
+.terms-btn-primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s;
+}
+
+.terms-btn-primary:hover:not(.disabled) {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 50px rgba(94,184,184,0.38);
+  filter: saturate(1.1);
+}
+
+.terms-btn-primary:hover:not(.disabled)::before {
+  transform: translateX(100%);
+}
+
+.terms-btn-primary.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.terms-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Focus states for accessibility */
+.terms-btn:focus,
+.terms-checkbox:focus {
+  outline: 3px solid rgba(94,184,184,0.3);
+  outline-offset: 3px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .terms-container {
+    padding: 15px;
+  }
+
+  .terms-card {
+    max-width: 100%;
+    border-radius: 16px;
+  }
+
+  .terms-header {
+    padding: 28px 20px;
+  }
+
+  .terms-header h1 {
+    font-size: 24px;
+  }
+
+  .terms-content {
+    padding: 25px;
+  }
+
+  .terms-scroll {
+    max-height: 320px;
+    padding-right: 12px;
+  }
+
+  .terms-checkbox-container {
+    margin: 0 25px 18px 25px;
+    padding: 16px 18px;
+  }
+
+  .terms-actions {
+    flex-direction: column;
+    padding: 0 25px 25px 25px;
+    gap: 12px;
+  }
+
+  .terms-btn {
+    padding: 14px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .terms-header {
+    padding: 24px 16px;
+  }
+
+  .terms-content {
+    padding: 20px;
+  }
+
+  .terms-scroll h2 {
+    font-size: 17px;
+  }
+
+  .terms-scroll p,
+  .terms-scroll ul li {
+    font-size: 14px;
+  }
+
+  .terms-checkbox-container {
+    margin: 0 20px 16px 20px;
+  }
+
+  .terms-actions {
+    padding: 0 20px 20px 20px;
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
